@@ -1,0 +1,19 @@
+if array !== undefined 
+    each val in errors
+      .alert.alert-warning.alert-dismissible.fade.show(role='alert')
+        h6 #{val.msg}
+        button.close(type='button', data-dismiss='alert', aria-label='Close')
+          span(aria-hidden='true') ×
+
+
+if success_msg === '' 
+  .alert.alert-success.alert-dismissible.fade.show(role='alert')
+    p #{success_msg}
+    button.close(type='button', data-dismiss='alert', aria-label='Close')
+      span(aria-hidden='true') ×  
+      
+if error_msg === '' 
+  .alert.alert-warning.alert-dismissible.fade.show(role='alert')
+    p #{error_msg}
+    button.close(type='button', data-dismiss='alert', aria-label='Close')
+      span(aria-hidden='true') ×  

@@ -7,7 +7,8 @@ block content
         h1.text-center.mb-3
           i.fas.fa-sign-in-alt
           |   Login
-    
+          include ./partials/messages
+
         form(action='/users/login', method='POST')
           .form-group
             label(for='email') Email

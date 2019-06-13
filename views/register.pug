@@ -7,19 +7,20 @@ block content
         h1.text-center.mb-3
           i.fas.fa-user-plus
           |  Register
+          include ./partials/messages
         form(action='/users/register', method='POST')
           .form-group
-            label(for='name') Name
-            input#name.form-control(type='name', name='name', placeholder='Enter Name')
+            label(for='username') Username
+            input#username.form-control(type='username', name='username', placeholder='Enter Username', value=(username))
           .form-group
             label(for='email') Email
-            input#email.form-control(type='email', name='email', placeholder='Enter Email')
+            input#email.form-control(type='email', name='email', placeholder='Enter Email', value=(email))
           .form-group
             label(for='password') Password
-            input#password.form-control(type='password', name='password', placeholder='Create Password')
+            input#password.form-control(type='password', name='password', placeholder='Create Password', value=(password))
           .form-group
             label(for='password2') Confirm Password
-            input#password2.form-control(type='password', name='password2', placeholder='Confirm Password')
+            input#password2.form-control(type='password', name='password2', placeholder='Confirm Password', value=(password2))
           button.btn.btn-primary.btn-block(type='submit')
             | Register
         p.lead.mt-4
