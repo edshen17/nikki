@@ -19,7 +19,7 @@ router.get('/register', function(req, res, next) {
   });
 });
 
-// POST /user/Register
+// POST /user/register
 router.post('/register', function(req, res, next) {
   const { username, email, password, password2 } = req.body;
   let errors = [];

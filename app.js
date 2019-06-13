@@ -15,6 +15,8 @@ app.use(bodyParser.urlencoded({
 
 // Passport config
 require('./config/passport')(passport);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // DB
 const db = require('./config/keys').MongoURI;
@@ -42,10 +44,6 @@ app.use(flash());
 // Routes
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
-
-// Passport
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Global vars
 app.use((req, res, next) => {

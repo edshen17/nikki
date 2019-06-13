@@ -4,13 +4,16 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 module.exports = function(passport) {
+
+  
   passport.use(
-    new LocalStrategy({ usernameField: 'username' }, (req, username, password, done) => {
+    new LocalStrategy((username, password, done) => {
       // Find user
       User.findOne({
         username: username
       }).then(user => {
         if (!user) {
+          console.log('no user')
           return done(null, false, { message: 'That user is not registered' });
         }
 
@@ -18,8 +21,10 @@ module.exports = function(passport) {
         bcrypt.compare(password, user.password, (err, isMatch) => {
           if (err) throw err;
           if (isMatch) {
+            console.log('good')
             return done(null, user);
           } else {
+            console.log('wrong pass')
             return done(null, false, { message: 'Password incorrect' });
           }
         });
