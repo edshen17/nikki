@@ -13,6 +13,9 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
+// Passport config
+require('./config/passport')(passport);
+
 // DB
 const db = require('./config/keys').MongoURI;
 
@@ -26,25 +29,30 @@ app.engine('pug', require('pug').__express)
 app.use(express.static(__dirname + '/static'));
 app.set('view engine', 'pug');
 
-// Routes
-app.use('/', require('./routes/index'));
-app.use('/users', require('./routes/users'));
-
-
 // Express session
 app.use(session({
-  secret: 'env-secret-goes-here',
+  secret: 'secret',
   resave: true,
-  saveUninitialized: true,
+  saveUninitialized: true
 }));
 
 // Connect flash
 app.use(flash());
 
+// Routes
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
+
+// Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Global vars
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+
   next();
 })
 
