@@ -7,6 +7,8 @@ html(lang='en')
     title #{title}
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css', integrity='sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M', crossorigin='anonymous')
     link(rel='stylesheet', href='/stylesheets/styles.css')
+    link(rel='stylesheet', href='https://bootswatch.com/4/journal/bootstrap.min.css')
+
   body
     nav.navbar.navbar-expand-lg.navbar-light.bg-light.nav-tabs
       a.navbar-brand.order-1.mr-0(href='#') Nikki
@@ -17,7 +19,8 @@ html(lang='en')
           a.nav-item.nav-link(class=(title === "Home" ? "active" : undefined), href='/')
             | Home 
             span.sr-only (current)
-          a.nav-item.nav-link(class=(title === "Login" ? "active" : undefined), href='/login') Login
+          a.nav-item.nav-link(class=(title === "Login" ? "active" : undefined), href='/users/login') Login
+          a.nav-item.nav-link(class=(title === "Register" ? "active" : undefined), href='/users/register') Register
 
     block content  
     script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN', crossorigin='anonymous')

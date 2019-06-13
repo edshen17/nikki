@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const passport = require('passport');
 const routes = require('./routes/index.js');
 const app = express();
 
@@ -10,7 +12,16 @@ app.engine('pug', require('pug').__express)
 app.use(express.static(__dirname + '/static'));
 app.set('view engine', 'pug');
 
-app.use('/', routes);
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
+
+app.use(session({
+  secret: 'env-secret-goes-here',
+  resave: true,
+  saveUninitialized: true,
+}));
+
+app.use(passport.initialize());
 
 // 404 error
 app.use(function(req, res, next) {
@@ -27,6 +38,7 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
 
 app.listen(3000, function() {
   console.log('Express app listening on port 3000');
