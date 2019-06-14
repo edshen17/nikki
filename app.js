@@ -45,10 +45,8 @@ app.use(flash());
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 
-// Global vars
+// Global vars for flash messages
 app.use((req, res, next) => {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
   next();
 })

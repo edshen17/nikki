@@ -11,7 +11,7 @@ module.exports = function(passport) {
         username: username
       }).then(user => {
         if (!user) {
-          return done(null, false, { message: 'That user is not registered' });
+          return done(null, false, { message: 'Username or password is incorrect' });
         }
 
         // Match password
@@ -20,7 +20,7 @@ module.exports = function(passport) {
           if (isMatch) {
             return done(null, user);
           } else {
-            return done(null, false, { message: 'Password incorrect' });
+            return done(null, false, { message: 'Username or password is incorrect' });
           }
         });
       });

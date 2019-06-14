@@ -5,19 +5,7 @@ if errors !== undefined
         button.close(type='button', data-dismiss='alert', aria-label='Close')
           span(aria-hidden='true') ×
           
-if success_msg !== ''
-  .alert.alert-success.alert-dismissible.fade.show(role='alert')
-    h6 #{success_msg}
-    button.close(type='button', data-dismiss='alert', aria-label='Close')
-      span(aria-hidden='true') ×  
-      
-if error_msg !== ''
-  .alert.alert-warning.alert-dismissible.fade.show(role='alert')
-    h6 #{error_msg}
-    button.close(type='button', data-dismiss='alert', aria-label='Close')
-      span(aria-hidden='true') ×  
-      
-if error !== ''
+if error.length !== 0
   .alert.alert-warning.alert-dismissible.fade.show(role='alert')
     h6 #{error}
     button.close(type='button', data-dismiss='alert', aria-label='Close')
