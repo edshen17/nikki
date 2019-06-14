@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 });
 
 // GET /dashboard
-router.get('/dashboard', function(req, res, next) {
+router.get('/dashboard', ensureAuthenticated, function(req, res, next) {
   return res.render('dashboard', {
     title: 'Dashboard',
     username: req.user.username

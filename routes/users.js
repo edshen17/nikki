@@ -90,19 +90,13 @@ router.post('/register', function(req, res, next) {
 });
 
 // POST /users/login
-// router.post('/login', (req, res, next) => {
-//   passport.authenticate('local', {
-//       successRedirect: '/dashboard',
-//       failureRedirect: '/users/login',
-//       failureFlash: true
-//     })(req, res, next);
-// });
-
-router.post('/login',
-    passport.authenticate('local'),function(req, res, next) {
-      console.log(req.user)
-     res.redirect('/dashboard');
-   });
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/users/login',
+    failureFlash: true
+  })(req, res, next);
+});
 
 // GET /users/logout
 router.get('/logout', (req, res, next) => {
