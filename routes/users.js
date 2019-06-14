@@ -9,9 +9,7 @@ const passport = require('passport');
 router.get('/login', function(req, res, next) {
   return res.render('login', {
     title: 'Login',
-    error: req.flash('error'),
-    // error_msg: req.flash('error_msg'),
-    // success_msg: req.flash('success_msg')
+    error: req.flash('error')
   });
 });
 
@@ -79,8 +77,13 @@ router.post('/register', function(req, res, next) {
               newUser.password = hash;
               newUser.save()
                 .then(user => {
-                  req.session.message = 'Account successfully made';
-                  res.redirect('/users/login')
+                  req.login(user, function(err) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      return res.redirect('/dashboard');
+                    }
+                  })
                 })
                 .catch(err => console.log(err));
           }));
