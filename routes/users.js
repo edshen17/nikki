@@ -10,8 +10,8 @@ router.get('/login', function(req, res, next) {
   return res.render('login', {
     title: 'Login',
     error: req.flash('error'),
-    error_msg: req.flash('error_msg'),
-    success_msg: req.flash('success_msg')
+    // error_msg: req.flash('error_msg'),
+    // success_msg: req.flash('success_msg')
   });
 });
 
@@ -57,7 +57,7 @@ router.post('/register', function(req, res, next) {
       .then(user => {
         if (user) {
           // user exists
-            errors.push({msg: 'User already exists'})
+            errors.push({msg: 'A user with that email already exists'})
             res.render('register', {
               errors,
               username,
@@ -89,13 +89,28 @@ router.post('/register', function(req, res, next) {
   }
 });
 
-// POST /user/login
-router.post('/login', (req, res, next) => {
-  passport.authenticate('local', {
-      successRedirect: '/dashboard',
-      failureRedirect: '/users/login',
-      failureFlash: true
-    })(req, res, next);
+// POST /users/login
+// router.post('/login', (req, res, next) => {
+//   passport.authenticate('local', {
+//       successRedirect: '/dashboard',
+//       failureRedirect: '/users/login',
+//       failureFlash: true
+//     })(req, res, next);
+// });
+
+router.post('/login',
+    passport.authenticate('local'),function(req, res, next) {
+      console.log(req.user)
+     res.redirect('/dashboard');
+   });
+
+// GET /users/logout
+router.get('/logout', (req, res, next) => {
+  req.logout();
+  req.flash('success_msg', 'You are now logged out')
+  res.redirect('/users/login');
 });
+
+
 
 module.exports = router;

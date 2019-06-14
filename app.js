@@ -7,10 +7,18 @@ const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const app = express();
 
+app.use(express.static(__dirname + '/static'));
 
 // Bodyparser
 app.use(bodyParser.urlencoded({
   extended: false
+}));
+
+// Express session
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
 }));
 
 // Passport config
@@ -28,15 +36,7 @@ mongoose.connect(db, { useNewUrlParser: true })
 
 // PUG
 app.engine('pug', require('pug').__express)
-app.use(express.static(__dirname + '/static'));
 app.set('view engine', 'pug');
-
-// Express session
-app.use(session({
-  secret: 'secret',
-  resave: true,
-  saveUninitialized: true
-}));
 
 // Connect flash
 app.use(flash());
@@ -45,13 +45,11 @@ app.use(flash());
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 
-// Global vars for flash messages
+// Global vars
 app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   next();
 })
-
-app.use(passport.initialize());
 
 // 404 error
 app.use(function(req, res, next) {
