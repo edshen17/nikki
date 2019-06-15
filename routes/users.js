@@ -13,14 +13,14 @@ router.get('/login', function(req, res, next) {
   });
 });
 
-// GET user/register
+// GET users/register
 router.get('/register', function(req, res, next) {
   return res.render('register', {
     title: 'Register'
   });
 });
 
-// POST /user/register
+// POST /users/register
 router.post('/register', function(req, res, next) {
   const { username, email, password, password2 } = req.body;
   let errors = [];
@@ -107,7 +107,5 @@ router.get('/logout', (req, res, next) => {
   req.flash('success_msg', 'You are now logged out')
   res.redirect('/users/login');
 });
-
-
 
 module.exports = router;

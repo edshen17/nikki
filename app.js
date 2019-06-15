@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const jsonParser = require('body-parser').json;
 const session = require('express-session');
 const passport = require('passport');
 const routes = require('./routes/index.js');
@@ -9,6 +10,7 @@ const app = express();
 
 app.use(express.static(__dirname + '/static'));
 
+app.use(jsonParser());
 // Bodyparser
 app.use(bodyParser.urlencoded({
   extended: false
