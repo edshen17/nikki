@@ -5,11 +5,12 @@ const session = require('express-session');
 const passport = require('passport');
 const routes = require('./routes/index.js');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 const flash = require('connect-flash');
 const app = express();
 
 app.use(express.static(__dirname + '/static'));
-
+app.use(morgan('dev'));
 app.use(jsonParser());
 // Bodyparser
 app.use(bodyParser.urlencoded({

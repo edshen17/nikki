@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const passport = require('passport');
+const { ensureAuthenticated } = require('../config/auth');
 
 //GET /login
 router.get('/login', function(req, res, next) {
@@ -101,11 +102,52 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
+// GET /users/:id
+// Route for getting a specific user's profile
+router.get('/:username', function(req, res, next) {
+  console.log(req.params.username);
+  return res.render('profile', {
+    title: req.params.username
+   });
+});
+
+// POST /users/:username/posts/:id
+// Route for creating a post
+router.post('/:username/posts/:id', function(req, res, next) {
+  return res.json({
+    response: 'post request sent to make a post',
+    postId: req.params.id,
+    body: req.body
+  });
+});
+
+// PUT /users/:username/posts/:id/:cid
+// Edit a specific comment
+router.put('/:username/posts/:id/:cid', function(req, res, next) {
+  return res.json({
+    response: 'put request to edit a comment',
+    postId: req.params.id,
+    commentId: req.params.cid,
+    body: req.body
+  });
+});
+
+// DELETE /users/:username/posts/:id/:cid
+// Delete a specific comment
+router.delete('/:username/posts/:id/:cid', function(req, res, next) {
+  return res.json({
+    response: 'DELETE request to delete a comment',
+    postId: req.params.id,
+    commentId: req.params.cid
+  });
+});
+
 // GET /users/logout
 router.get('/logout', (req, res, next) => {
   req.logout();
   req.flash('success_msg', 'You are now logged out')
   res.redirect('/users/login');
 });
+
 
 module.exports = router;
