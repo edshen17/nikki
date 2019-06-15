@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const Post = require('../models/Post').Post;
+const Comment = require('../models/Post').Comment;
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
 
@@ -113,34 +115,35 @@ router.get('/:username', function(req, res, next) {
 
 // POST /users/:username/posts/:id
 // Route for creating a post
-router.post('/:username/posts/:id', function(req, res, next) {
-  return res.json({
-    response: 'post request sent to make a post',
-    postId: req.params.id,
-    body: req.body
-  });
-});
+// router.post('/:username/posts/:id', function(req, res, next) {
+//   return res.json({
+//     response: 'post request sent to make a post',
+//     postId: req.params.id,
+//     body: req.body
+//   });
+// });
 
 // PUT /users/:username/posts/:id/:cid
 // Edit a specific comment
-router.put('/:username/posts/:id/:cid', function(req, res, next) {
-  return res.json({
-    response: 'put request to edit a comment',
-    postId: req.params.id,
-    commentId: req.params.cid,
-    body: req.body
-  });
-});
+//router.put('/:username/posts/:id/:cid', function(req, res, next) {
+  // return res.json({
+  //   response: 'put request to edit a comment',
+  //   postId: req.params.id,
+  //   commentId: req.params.cid,
+  //   body: req.body
+  // });
+
+//});
 
 // DELETE /users/:username/posts/:id/:cid
 // Delete a specific comment
-router.delete('/:username/posts/:id/:cid', function(req, res, next) {
-  return res.json({
-    response: 'DELETE request to delete a comment',
-    postId: req.params.id,
-    commentId: req.params.cid
-  });
-});
+// router.delete('/:username/posts/:id/:cid', function(req, res, next) {
+//   return res.json({
+//     response: 'DELETE request to delete a comment',
+//     postId: req.params.id,
+//     commentId: req.params.cid
+//   });
+// });
 
 // GET /users/logout
 router.get('/logout', (req, res, next) => {
