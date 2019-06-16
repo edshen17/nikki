@@ -7,6 +7,7 @@ const Post = require('../models/Post').Post;
 const Comment = require('../models/Post').Comment;
 const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
+const ObjectId = require('mongoose').Types.ObjectId; 
 
 //GET /login
 router.get('/login', function(req, res, next) {
@@ -58,7 +59,7 @@ router.post('/register', function(req, res, next) {
       .then(user => {
         if (user) {
           // user exists
-            errors.push({msg: 'A user with that email already exists'})
+            errors.push({msg: 'A user with that email already exists'});
             res.render('register', {
               errors,
               username,
@@ -107,21 +108,31 @@ router.post('/login', (req, res, next) => {
 // GET /users/logout
 router.get('/logout', (req, res, next) => {
   req.logout();
-  req.flash('success_msg', 'You are now logged out')
+  // req.flash('success_msg', 'You are now logged out')
   res.status(301).redirect('/users/login')
 });
 
 // GET /users/:id
 // Route for getting a specific user's profile
 router.get('/:username', function(req, res, next) {
-  console.log(req.params.username);
   return res.json({username: req.params.username})
 });
 
-// GET /users/:username/posts/:id
-// Route for getting a post
+// GET /users/:username/posts
+// Route for getting all the posts
 router.get('/:username/posts', function(req, res, next) {
   Post.find({})
+    .sort({createdAt: -1})
+    .exec(function(err, posts) {
+      if (err) return next(err);
+      res.json(posts);
+    });
+});
+
+// GET /users/:username/posts.:id
+// Route for getting a specific post
+router.get('/:username/posts/:id', function(req, res, next) {
+  Post.find({_id: new ObjectId(req.params.id)})
     .sort({createdAt: -1})
     .exec(function(err, posts) {
       if (err) return next(err);
@@ -133,7 +144,9 @@ router.get('/:username/posts', function(req, res, next) {
 // POST /users/:username/posts
 // Route for creating a post
 router.post('/:username/posts', function(req, res, next) {
-  const post = new Post(req.body);
+  const post = new Post({
+    text: req.text
+  });
   post.save(function(err, post) {
     if (err) return next(err);
     res.status(201);
