@@ -17,7 +17,6 @@ const CommentSchema = new Schema({
   createdAt: {type: Date, default: Date.now},
   editedAt: {type: Date, default: Date.now},
   likedBy: [User]
-
 });
 
 // Edit a schema

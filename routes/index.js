@@ -10,14 +10,6 @@ router.get('/', function(req, res, next) {
   });
 });
 
-// // GET /dashboard
-// router.get('/dashboard', ensureAuthenticated, function(req, res, next) {
-//   return res.render('dashboard', {
-//     title: 'Dashboard',
-//     username: req.user.username
-//    });
-// });
-
 // GET /dashboard
 router.get('/dashboard', ensureAuthenticated, function(req, res, next) {
   return res.render('dashboard', {
