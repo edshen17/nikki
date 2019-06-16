@@ -19,10 +19,11 @@ html(lang='en')
           a.nav-item.nav-link(class=(title === "Home" ? "active" : undefined), href='/')
             | Home 
             span.sr-only (current)
-          if !username
+          if !user
             a.nav-item.nav-link(class=(title === "Login" ? "active" : undefined), href='/users/login') Login
             a.nav-item.nav-link(class=(title === "Register" ? "active" : undefined), href='/users/register') Register
-          if username
+          if user
+            a.nav-item.nav-link(class=(title === "Dashboard" ? "active" : undefined) href='/dashboard') Dashboard
             a.nav-item.nav-link(href='/users/logout') Log Out
 
     block content  

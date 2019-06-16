@@ -9,6 +9,19 @@ const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
 const ObjectId = require('mongoose').Types.ObjectId; 
 
+router.param('id', function(req, res, next, id) {
+  Post.findById(id, function(err, post) {
+    if (err) return next(err);
+    if (!post) {
+      err = new Error('Not Found');
+      err.status = 404;
+      return next(err);
+    }
+    req.post = post;
+    return next();
+  });
+});
+
 //GET /login
 router.get('/login', function(req, res, next) {
   return res.render('login', {
@@ -129,15 +142,10 @@ router.get('/:username/posts', function(req, res, next) {
     });
 });
 
-// GET /users/:username/posts.:id
+// GET /users/:username/posts/:id
 // Route for getting a specific post
 router.get('/:username/posts/:id', function(req, res, next) {
-  Post.find({_id: new ObjectId(req.params.id)})
-    .sort({createdAt: -1})
-    .exec(function(err, posts) {
-      if (err) return next(err);
-      res.json(posts);
-    });
+  res.json(req.post);
 });
 
 
@@ -154,17 +162,18 @@ router.post('/:username/posts', function(req, res, next) {
   });
 });
 
+
 // PUT /users/:username/posts/:id/:cid
 // Edit a specific comment
-//router.put('/:username/posts/:id/:cid', function(req, res, next) {
-  // return res.json({
-  //   response: 'put request to edit a comment',
-  //   postId: req.params.id,
-  //   commentId: req.params.cid,
-  //   body: req.body
-  // });
+// router.put('/:username/posts/:id/:cid', function(req, res, next) {
+//   return res.json({
+//     response: 'put request to edit a comment',
+//     postId: req.params.id,
+//     commentId: req.params.cid,
+//     body: req.body
+//   });
 
-//});
+// });
 
 // DELETE /users/:username/posts/:id/:cid
 // Delete a specific comment

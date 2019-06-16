@@ -27,6 +27,7 @@ CommentSchema.method('edit', function(edits, callback) {
 
 const PostSchema = new Schema({
   postedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  title: String,
   text: String,
   createdAt: {type: Date, default: Date.now},
   comments: [CommentSchema],
