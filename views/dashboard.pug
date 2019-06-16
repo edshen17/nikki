@@ -3,3 +3,10 @@ extends layout
 block content
   h1.mt-4 Dashboard
   p.lead.mb-3 Welcome #{username}
+
+  form(method='POST' action='/users/' + username + '/posts')
+    label(for='title') Title
+    input#title(type='text', name='title')
+    label(for='content') Content
+    input#content(type='text', name='content')
+    button(type='submit') Submit

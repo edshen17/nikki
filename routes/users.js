@@ -9,6 +9,7 @@ const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
 const ObjectId = require('mongoose').Types.ObjectId; 
 
+// Accesses the id param and searches comments by id
 router.param('id', function(req, res, next, id) {
   Post.findById(id, function(err, post) {
     if (err) return next(err);
@@ -121,7 +122,6 @@ router.post('/login', (req, res, next) => {
 // GET /users/logout
 router.get('/logout', (req, res, next) => {
   req.logout();
-  // req.flash('success_msg', 'You are now logged out')
   res.status(301).redirect('/users/login')
 });
 
@@ -148,13 +148,15 @@ router.get('/:username/posts/:id', function(req, res, next) {
   res.json(req.post);
 });
 
-
 // POST /users/:username/posts
 // Route for creating a post
 router.post('/:username/posts', function(req, res, next) {
-  const post = new Post({
-    text: req.text
+    const post = new Post({
+    postedBy: req.params.username,
+    title: req.body.title,
+    content: req.body.content,
   });
+
   post.save(function(err, post) {
     if (err) return next(err);
     res.status(201);

@@ -3,20 +3,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const User = require('../models/User');
 
-// sorts comments by most number of likes
-// const sortComments = function(a, b) {
-//   if (a.votes === b.votes) {
-//       return b.updatedAt - a.updatedAt;
-//   }
-//
-//   return b.votes - a.votes;
-// }
-
 const CommentSchema = new Schema({
-  text: String,
+  postedBy: {
+    type: String,
+    required: true
+  },
+  content: {
+    type: String,
+    required: true
+  },
   createdAt: {type: Date, default: Date.now},
   editedAt: {type: Date, default: Date.now},
-  likedBy: [User]
+  likedBy: [String]
 });
 
 // Edit a schema
@@ -26,12 +24,20 @@ CommentSchema.method('edit', function(edits, callback) {
 });
 
 const PostSchema = new Schema({
-  postedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  title: String,
-  text: String,
+  postedBy: {
+    type: String,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
+  },
+  content: {
+    type: String,
+    required: true
+  },
   createdAt: {type: Date, default: Date.now},
-  comments: [CommentSchema],
-  likedBy: [User]
+  likedBy: [String]
 });
 
 // PostSchema.pre('save', function(next) {

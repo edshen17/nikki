@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 
+// Passes user variable from passport session to all pages,
+// allowing the navbar to show different links if user is logged in or not
 router.get('*', function(req, res, next) {
   res.locals.user = req.user || null;
   next();
