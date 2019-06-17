@@ -5,7 +5,7 @@ block content
   h1.mt-4 Dashboard
   p.lead.mb-3 Welcome #{username}
 
-  #helloVue {{ title }}
+  #helloVue(v-text='title')
 
   form(method='POST' action='/users/' + username + '/posts')
     label(for='title') Title
@@ -13,5 +13,6 @@ block content
     label(for='content') Content
     input#content(type='text', name='content')
     button(type='submit') Submit
+    
     
 

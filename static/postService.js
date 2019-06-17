@@ -4,3 +4,4 @@ const helloWorld = new Vue({
         title: 'Hello world'
     }
 });
+
