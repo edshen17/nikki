@@ -9,7 +9,7 @@ const passport = require('passport');
 const { ensureAuthenticated } = require('../config/auth');
 const ObjectId = require('mongoose').Types.ObjectId; 
 
-// Accesses the id param and searches comments by id
+// Accesses the id param and searches posts by id
 router.param('id', function(req, res, next, id) {
   Post.findById(id, function(err, post) {
     if (err) return next(err);
@@ -128,7 +128,7 @@ router.get('/logout', (req, res, next) => {
 // GET /users/:id
 // Route for getting a specific user's profile
 router.get('/:username', function(req, res, next) {
-  return res.json({username: req.params.username})
+  return res.send({username: req.params.username})
 });
 
 // GET /users/:username/posts
@@ -138,14 +138,14 @@ router.get('/:username/posts', function(req, res, next) {
     .sort({createdAt: -1})
     .exec(function(err, posts) {
       if (err) return next(err);
-      res.json(posts);
+      res.send(posts);
     });
 });
 
 // GET /users/:username/posts/:id
 // Route for getting a specific post
 router.get('/:username/posts/:id', function(req, res, next) {
-  res.json(req.post);
+  res.send(req.post);
 });
 
 // POST /users/:username/posts
@@ -159,11 +159,20 @@ router.post('/:username/posts', function(req, res, next) {
 
   post.save(function(err, post) {
     if (err) return next(err);
-    res.status(201);
-    res.json(post);
+    res.status(201).send(post);
   });
 });
 
+// DELETE /users/:username/post/:id
+// Route for deleting a specific post
+router.delete('/:username/posts/:id', function(req, res, next) {
+  req.post.remove(function(err) {
+    req.post.save(function(err, post) {
+      if (err) return next(err);
+      res.status(200).send()
+    });
+  });
+});
 
 // PUT /users/:username/posts/:id/:cid
 // Edit a specific comment
