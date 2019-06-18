@@ -128,7 +128,7 @@ router.get('/logout', (req, res, next) => {
 // GET /users/:username
 // Route for getting a specific user's profile 
 router.get('/:username', function(req, res, next) {
-  return res.render('profile');
+  return res.render('profile', {test: req.params.username});
 });
 
 // GET /users/:username/posts
@@ -138,7 +138,7 @@ router.get('/:username/posts', function(req, res, next) {
     .sort({createdAt: -1})
     .exec(function(err, posts) {
       if (err) return next(err);
-      res.send(posts);
+      res.json(posts);
     });
 });
 

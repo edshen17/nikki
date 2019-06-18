@@ -5,16 +5,32 @@
 //         userContent: ''
 //     }
 // });
+Vue.use(VueRouter);
 
+Vue.component('user', {
+    props: ['text'],
+    template: '<h1>Hello {{ text  }}!</h1>'
+});
+    
+
+// const User = {
+//     template: '<div>User</div>'
+//   }
+  
+ 
 const profileComponent = new Vue({
     el: '#profileComponent',
     data: {
-        posts: []
+        posts: null,
+        user: null
     }, 
     mounted () {
       axios
-        .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-        .then(response => (this.info = response))
+        .get(`http://localhost:3000/users/${test}/posts`)
+        .then(response => {
+            this.posts = response.data;
+            console.log(this.posts)
+        })
     }
 });
 

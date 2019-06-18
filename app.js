@@ -6,6 +6,7 @@ const passport = require('passport');
 const routes = require('./routes/index.js');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const cors = require('cors');
 const flash = require('connect-flash');
 const app = express();
 
@@ -16,17 +17,6 @@ app.use(jsonParser());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-
-// To allow our API to be consumed from any domain/CORS setup
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  if (req.method === 'OPTIONS') {
-    res.header('Acess-Control-Allow-Methods', 'PUT,POST,DELETE');
-    return res.status(200).json({});
-  }
-  next();
-});
 
 // Express session
 app.use(session({
@@ -54,6 +44,8 @@ app.set('view engine', 'pug');
 
 // Connect flash
 app.use(flash());
+
+app.use(cors());
 
 // Routes
 app.use('/', require('./routes/index'));
