@@ -128,13 +128,13 @@ router.get('/logout', (req, res, next) => {
 // GET /users/:id
 // Route for getting a specific user's profile
 router.get('/:username', function(req, res, next) {
-  return res.send({username: req.params.username})
+  return res.redirect(req.params.username + '/posts');
 });
 
 // GET /users/:username/posts
 // Route for getting all the posts
 router.get('/:username/posts', function(req, res, next) {
-  Post.find({})
+  Post.find({postedBy: req.params.username})
     .sort({createdAt: -1})
     .exec(function(err, posts) {
       if (err) return next(err);

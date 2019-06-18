@@ -1,4 +1,9 @@
 extends layout
 
 block content
+    #profileComponent
+        ul.posts
+            li(v-for='post in posts')
+                h3 {{post.title}}
+                p {{post.content}}
     

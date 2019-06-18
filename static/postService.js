@@ -1,7 +1,15 @@
-const helloWorld = new Vue({
-    el: '#helloVue',
+const formComponent = new Vue({
+    el: '#formComponent',
     data: {
-        title: 'Hello world'
+        userTitle: '',
+        userContent: ''
+    }
+});
+
+const profileComponent = new Vue({
+    el: '#profileComponent',
+    data: {
+        posts: [{title: 'test', content: 'testesttest'}]
     }
 });
 

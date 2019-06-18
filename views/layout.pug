@@ -24,7 +24,7 @@ html(lang='en')
             a.nav-item.nav-link(class=(title === "Register" ? "active" : undefined), href='/users/register') Register
           if user
             a.nav-item.nav-link(class=(title === "Dashboard" ? "active" : undefined) href='/dashboard') Dashboard
-            a.nav-item.nav-link(class=(title === "Profile" ? "active" : undefined) href='/profile') Profile
+            a.nav-item.nav-link(class=(title === "Profile" ? "active" : undefined) href='/users/' + user.username) Profile
             a.nav-item.nav-link(href='/users/logout') Log Out
 
     block content  

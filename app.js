@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-// To allow our API to be consumed from any domain
+// To allow our API to be consumed from any domain/CORS setup
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
