@@ -1,15 +1,20 @@
-const formComponent = new Vue({
-    el: '#formComponent',
-    data: {
-        userTitle: '',
-        userContent: ''
-    }
-});
+// const formComponent = new Vue({
+//     el: '#formComponent',
+//     data: {
+//         userTitle: '',
+//         userContent: ''
+//     }
+// });
 
 const profileComponent = new Vue({
     el: '#profileComponent',
     data: {
-        posts: [{title: 'test', content: 'testesttest'}]
+        posts: []
+    }, 
+    mounted () {
+      axios
+        .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+        .then(response => (this.info = response))
     }
 });
 

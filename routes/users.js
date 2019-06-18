@@ -125,14 +125,14 @@ router.get('/logout', (req, res, next) => {
   res.status(301).redirect('/users/login')
 });
 
-// GET /users/:id
-// Route for getting a specific user's profile
+// GET /users/:username
+// Route for getting a specific user's profile 
 router.get('/:username', function(req, res, next) {
-  return res.redirect(req.params.username + '/posts');
+  return res.render('profile');
 });
 
 // GET /users/:username/posts
-// Route for getting all the posts
+// Route for getting all the posts of a user
 router.get('/:username/posts', function(req, res, next) {
   Post.find({postedBy: req.params.username})
     .sort({createdAt: -1})
