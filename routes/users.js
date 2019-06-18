@@ -128,7 +128,7 @@ router.get('/logout', (req, res, next) => {
 // GET /users/:username
 // Route for getting a specific user's profile 
 router.get('/:username', function(req, res, next) {
-  return res.render('profile', {test: req.params.username});
+  return res.render('profile', {username: req.params.username});
 });
 
 // GET /users/:username/posts

@@ -13,9 +13,9 @@ Vue.component('user', {
 });
     
 
-// const User = {
-//     template: '<div>User</div>'
-//   }
+const User = {
+    template: '<div>User</div>'
+  }
   
  
 const profileComponent = new Vue({
@@ -26,7 +26,7 @@ const profileComponent = new Vue({
     }, 
     mounted () {
       axios
-        .get(`http://localhost:3000/users/${test}/posts`)
+        .get(`http://localhost:3000/users/${username}/posts`)
         .then(response => {
             this.posts = response.data;
             console.log(this.posts)
