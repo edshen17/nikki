@@ -4,7 +4,7 @@ block content
     .container-fluid.pt-4.px-4
     .row
         .col-lg-3.ml-5.py-2
-            p profile information
+            p #{username} #{bio}
         .col-lg
             #posts
                 posts(name=username, v-for='post in posts' v-bind:post='post')
