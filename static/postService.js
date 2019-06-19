@@ -1,25 +1,19 @@
-// const formComponent = new Vue({
-//     el: '#formComponent',
-//     data: {
-//         userTitle: '',
-//         userContent: ''
-//     }
-// });
 Vue.use(VueRouter);
 
 Vue.component('user', {
-    props: ['text'],
-    template: '<h1>Hello {{ text  }}!</h1>'
+    props: ['name', 'title', 'content', 'date'],
+    template: 
+       `<div class='blog-posts'> 
+       <h1>{{title}}</h1>
+         <p>{{content}}</p>
+         <p>{{name}}</p>
+         <p>{{date}}</p>
+         </div>
+       `     
 });
-    
-
-const User = {
-    template: '<div>User</div>'
-  }
-  
- 
+      
 const profileComponent = new Vue({
-    el: '#profileComponent',
+    el: '#profile',
     data: {
         posts: null,
         user: null

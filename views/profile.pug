@@ -1,7 +1,10 @@
 extends layout
 
 block content
-    #profileComponent
+    #profile
+        user(name=username, v-for='post in posts' 
+        v-bind:date='post.createdAt' v-bind:author= 'post.name' 
+        v-bind:title='post.title' v-bind:content='post.content')
     script. 
         username = "#{username}"
 
