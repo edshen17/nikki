@@ -18,8 +18,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  posts: {
-    type: [PostSchema]
+  imageURL: {
+    type: String,
+    default: '',
+    required: false
+  },
+  bio: {
+    type: String,
+    default: 'has not written a self-introduction yet',
+    required: false
   }
 });
 

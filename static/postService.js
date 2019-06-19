@@ -1,22 +1,23 @@
 Vue.use(VueRouter);
 
-Vue.component('user', {
-    props: ['name', 'title', 'content', 'date'],
-    template: 
-       `<div class='blog-posts'> 
-       <h1>{{title}}</h1>
-         <p>{{content}}</p>
-         <p>{{name}}</p>
-         <p>{{date}}</p>
-         </div>
-       `     
+Vue.component('posts', {
+    props: ['post'],
+    template: `
+        <div class='blog-post py-2'>
+            <h3> {{post.title}} </h3>
+            <h6> {{post.postedBy}} </h6>
+            <div v-html='post.content'></div>
+            <i class="far fa-heart py-2"></i>
+            <i class="far fa-comment-dots mx-3"></i>
+        </div>
+    
+    `  
 });
       
-const profileComponent = new Vue({
-    el: '#profile',
+const postComponent = new Vue({
+    el: '#posts',
     data: {
-        posts: null,
-        user: null
+        posts: null
     }, 
     mounted () {
       axios

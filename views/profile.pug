@@ -1,10 +1,13 @@
 extends layout
 
 block content
-    #profile
-        user(name=username, v-for='post in posts' 
-        v-bind:date='post.createdAt' v-bind:author= 'post.name' 
-        v-bind:title='post.title' v-bind:content='post.content')
+    .container-fluid.pt-4.px-4
+    .row
+        .col-lg-3.ml-5.py-2
+            p profile information
+        .col-lg
+            #posts
+                posts(name=username, v-for='post in posts' v-bind:post='post')
     script. 
         username = "#{username}"
 
