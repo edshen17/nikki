@@ -1,7 +1,7 @@
 Vue.use(VueRouter);
 
 Vue.component('posts', {
-    props: ['post', 'liked'],
+    props: ['post', 'logged' , 'liked', 'loggedUser'],
     template: `
         <div class='blog-post py-2'>
             <h3> {{post.title}} </h3>
@@ -20,6 +20,9 @@ Vue.component('posts', {
     `,
     methods: {
         likePost: function(post) {
+            // adding properties to the post object by getting post prop values
+            post.logged = this.logged;
+            if (this.loggedUser) post.loggedUser = this.loggedUser
             this.$emit('like-post', this.post)
         }
     }
@@ -27,13 +30,23 @@ Vue.component('posts', {
       
 const postComponent = new Vue({
     el: '#posts',
-    data: {
-        posts: null
+    data: function() {
+        let data = {
+            posts: null
+        }
+
+        return data;
     }, 
     methods: {
         like: function(post) {
             post.liked = !post.liked
-            post.likedBy.push('test')
+            if (post.logged && !post.likedBy.includes(post.loggedUser)) {
+                post.likedBy.push(post.loggedUser);
+            } else if (!post.logged)  {
+                alert('You have to be logged in to like or comment on a post');
+            } else if (!post.liked) {
+                post.likedBy.shift();
+            }
         }
     },
     mounted () {

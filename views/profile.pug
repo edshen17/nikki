@@ -7,8 +7,15 @@ block content
             p #{username} #{bio}
         .col-lg
             #posts
-                posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:liked='false' v-on:like-post='like')
-    script. 
-        username = "#{username}"
+                if user
+                    posts(name=username, v-for='post in posts' v-bind:post='post' 
+                    v-bind:liked='false' v-bind:logged='true' v-on:like-post='like' logged-user=user.username)
+                else 
+                    posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:liked='false' v-bind:logged='false' v-on:like-post='like' )
+                
+    script(type="text/javascript"). 
+        let username = '#{username}';
+        
+        
 
     
