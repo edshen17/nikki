@@ -8,7 +8,7 @@ Vue.component('posts', {
             <h6> {{post.postedBy}} </h6>
             <div v-html='post.content'></div>
             <span class='likes'>
-            <i class='far fa-heart py-2' v-on:click='like' v-bind:class='{far: !liked, fas: liked, colorRed: liked}'></i>
+            <i class='far fa-heart py-2' v-on:click="$emit('like')" v-bind:class='{far: !liked, fas: liked, colorRed: liked}'></i>
             {{post.likedBy.length}} 
             </span>
             <span class='comments'>
@@ -16,24 +16,20 @@ Vue.component('posts', {
             {{post.comments.length}}
             </span>
         </div>
-    `,  
-    methods: {
-        like: function() {
-            this.liked = !this.liked
-        }
-    }
+    `
 });
       
 const postComponent = new Vue({
     el: '#posts',
     data: {
-        posts: null
+        posts: null,
+        liked: false
     }, 
-    // methods: {
-    //     alert: function(event) {
-    //         alert('button has been clicked')
-    //     }
-    // },
+    methods: {
+        like: function() {
+            this.liked = !this.liked
+        }
+    },
     mounted () {
       axios
         .get(`http://localhost:3000/users/${username}/posts`)
