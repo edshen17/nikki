@@ -8,6 +8,8 @@ block content
         .col-lg
             #posts
                 if user
+                    script(type="text/javascript"). 
+                        let loggedUser = '#{user.username}'
                     posts(name=username, v-for='post in posts' v-bind:post='post' 
                     v-bind:logged='true' v-on:like-post='like' logged-user=user.username)
                 else 
@@ -15,7 +17,8 @@ block content
                 
     script(type="text/javascript"). 
         let username = '#{username}';
-        let loggedUser = '#{user.username}'
+
+
         
         
 

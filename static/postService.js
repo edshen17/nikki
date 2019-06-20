@@ -46,7 +46,6 @@ const postComponent = new Vue({
         let data = {
             posts: null
         }
-
         return data;
     }, 
     methods: {
