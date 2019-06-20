@@ -7,7 +7,7 @@ block content
             p #{username} #{bio}
         .col-lg
             #posts
-                posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:liked='liked' v-on:like='like')
+                posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:liked='false' v-on:like-post='like')
     script. 
         username = "#{username}"
 
