@@ -168,6 +168,21 @@ router.post('/:username/posts', function(req, res, next) {
   });
 });
 
+// POST /users/:username/posts
+// Route for liking/unliking a post
+router.post('/:username/posts/:id/like', function(req, res, next) {
+  Post.findById(req.params.id, function(err, post) {
+    if (err) return next(err);
+    else {
+      post.likedBy = req.body.likedBy;
+      post.save(function(err, post) {
+        if (err) return next(err);
+        res.status(200).send(post);
+      });
+    }
+  });  
+});
+
 // DELETE /users/:username/post/:id
 // Route for deleting a specific post
 router.delete('/:username/posts/:id', function(req, res, next) {

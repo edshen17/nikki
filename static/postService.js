@@ -27,6 +27,17 @@ Vue.component('posts', {
         }
     }
 });
+
+// updates the list of likes by updating the db and replacing the db's array of likes with the current one
+function updatedLikeList(post) {
+    axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/like`, {likedBy: post.likedBy})
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+}
       
 const postComponent = new Vue({
     el: '#posts',
@@ -39,13 +50,15 @@ const postComponent = new Vue({
     }, 
     methods: {
         like: function(post) {
-            post.liked = !post.liked
-            if (post.logged && !post.likedBy.includes(post.loggedUser)) {
+            post.liked = !post.liked //likes or unlikes by flipping post.liked property
+            if (post.logged && !post.likedBy.includes(post.loggedUser)) { // if logged in and post has not been liked by this user
                 post.likedBy.push(post.loggedUser);
+                updatedLikeList(post);
             } else if (!post.logged)  {
                 alert('You have to be logged in to like or comment on a post');
-            } else if (!post.liked) {
+            } else if (!post.liked) { //user unliking the post
                 post.likedBy.shift();
+                updatedLikeList(post);
             }
         }
     },
@@ -54,7 +67,6 @@ const postComponent = new Vue({
         .get(`http://localhost:3000/users/${username}/posts`)
         .then(response => {
             this.posts = response.data;
-            console.log(this.posts)
         })
     }
     
