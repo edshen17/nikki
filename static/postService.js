@@ -5,8 +5,7 @@ Vue.component('posts', {
     template: `
         <div class='blog-post py-2'>
             <h3> {{post.title}} </h3>
-            <p> {{post.likedBy}}</p>
-            <h6> {{post.postedBy}} </h6>
+            <h6> Posted by {{post.postedBy}} </h6>
             <div v-html='post.content'></div>
             <span class='likes'>
             <i class='far fa-heart py-2' v-on:click='likePost(post)' v-bind:class='{far: !post.liked, fas: post.liked, colorRed: post.liked}'></i>
@@ -16,13 +15,14 @@ Vue.component('posts', {
             <i class='far fa-comment-dots ml-3'></i>
             {{post.comments.length}}
             </span>
+            <p> {{post.likedBy}}</p>
         </div>
     `,
     methods: {
         likePost: function(post) {
             // adding properties to the post object by getting post prop values
             post.logged = this.logged;
-            if (this.loggedUser) post.loggedUser = this.loggedUser
+            if (this.loggedUser) post.loggedUser = this.loggedUser // if there is a user logged in, create prop on object
             this.$emit('like-post', this.post)
         }
     }
@@ -38,6 +38,7 @@ function updatedLikeList(post) {
                     console.log(error);
                 });
 }
+
       
 const postComponent = new Vue({
     el: '#posts',
@@ -63,12 +64,19 @@ const postComponent = new Vue({
         }
     },
     mounted () {
-      axios
-        .get(`http://localhost:3000/users/${username}/posts`)
-        .then(response => {
-            this.posts = response.data;
+        axios.get(`http://localhost:3000/users/${username}/posts`)
+            .then(response => {
+                this.posts = response.data;
+
+                if (loggedUser) {
+                    // for each post, check if logged in user already liked it (to color in the icons)
+                    for (let i=0; i < this.posts.length; i++) {
+                        if (this.posts[i].likedBy.includes(loggedUser)) {
+                            this.posts[i].liked = true
+                        }
+                    }
+                }     
         })
     }
-    
 });
 
