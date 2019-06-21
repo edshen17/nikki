@@ -142,8 +142,6 @@ router.get('/:username', function(req, res, next) {
           }
         } 
         bio = user[0].bio;
-        
-        console.log(loggedUser);
         return res.render('profile', {username: req.params.username, bio: bio, loggedUser: loggedUser});
       });
 });

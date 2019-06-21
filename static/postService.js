@@ -15,7 +15,7 @@ Vue.component('posts', {
             <i class='far fa-comment-dots ml-3'></i>
             {{post.comments.length}}
             </span>
-            <p> {{post.likedBy}}</p>
+            <p> {{post.likedBy}}</p> 
         </div>
     `,
     methods: {
@@ -52,7 +52,7 @@ const postComponent = new Vue({
         like: function(post) {  
             post.liked = !post.liked //likes or unlikes by flipping post.liked property
             if (post.logged && !post.likedBy.includes(post.loggedUser)) { // if logged in and post has not been liked by this user
-                post.likedBy.push(post.loggedUser);
+                post.likedBy.push(JSON.parse(JSON.stringify(post.loggedUser)));
                 updatedLikeList(post);
             } else if (!post.logged)  {
                 alert('You have to be logged in to like or comment on a post');
@@ -66,14 +66,17 @@ const postComponent = new Vue({
         axios.get(`http://localhost:3000/users/${username}/posts`)
             .then(response => {
                 this.posts = response.data;
-
                 if (loggedUser) {
-                    console.log(loggedUser);
                     // for each post, check if logged in user already liked it (to color in the icons)
-                    for (let i=0; i < this.posts.length; i++) {
-                        if (this.posts[i].likedBy.includes(loggedUser)) {
-                            this.posts[i].liked = true
+                    for (let i = 0; i < this.posts.length; i++) {
+                        console.log(this.posts[i].likedBy)
+                        for(let j=0; j < this.posts[i].likedBy.length; j++) {
+                            //console.log(JSON.parse(this.posts[i].likedBy[j]).username === loggedUser.username)
+                            if (JSON.parse(this.posts[i].likedBy[j]).username === loggedUser.username) {
+                                this.posts[i].liked = true
+                            }
                         }
+                       
                         // axios.get(`http://localhost:3000/users/${this.posts[i].likedBy}/json`).then(response => {
 
                         // });
