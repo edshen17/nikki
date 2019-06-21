@@ -128,24 +128,47 @@ router.get('/logout', (req, res, next) => {
 // GET /users/:username
 // Route for getting a specific user's profile 
 router.get('/:username', function(req, res, next) {
-  User.find({username: req.params.username})
+  User.find({username: req.params.username}, 'bio username imageURL')
+      .exec(function(err, user) {
+        let bio = ''
+        let loggedUser = null;
+        if (err) return next(err); // pass req.user.username/other info or make new object and pass along for like rather than loggedUser
+        if (req.user) { // if user is logged in, use session var
+          loggedUser = {
+            imageURL: req.user.imageURL,
+            bio: req.user.bio,
+            _id: req.user.id,
+            username: req.user.username
+          }
+        } 
+        bio = user[0].bio;
+        
+        console.log(loggedUser);
+        return res.render('profile', {username: req.params.username, bio: bio, loggedUser: loggedUser});
+      });
+});
+
+// GET /users/:username/json
+// Route for getting a specific user's json data
+router.get('/:username/json', function(req, res, next){
+  User.find({username: req.params.username}, 'bio username imageURL')
       .exec(function(err, user) {
         if (err) return next(err);
-        return res.render('profile', {username: req.params.username, bio: user[0].bio});
+        return res.status(200).json(user);
       });
-  
 });
 
 // GET /users/:username/posts
-// Route for getting all the posts of a user
+// Route for getting all the posts of a user 
 router.get('/:username/posts', function(req, res, next) {
   Post.find({postedBy: req.params.username})
     .sort({createdAt: -1})
     .exec(function(err, posts) {
       if (err) return next(err);
-      res.json(posts);
+      res.status(200).json(posts);
     });
 });
+
 
 // GET /users/:username/posts/:id
 // Route for getting a specific post

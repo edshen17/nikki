@@ -49,7 +49,7 @@ const postComponent = new Vue({
         return data;
     }, 
     methods: {
-        like: function(post) {
+        like: function(post) {  
             post.liked = !post.liked //likes or unlikes by flipping post.liked property
             if (post.logged && !post.likedBy.includes(post.loggedUser)) { // if logged in and post has not been liked by this user
                 post.likedBy.push(post.loggedUser);
@@ -68,11 +68,15 @@ const postComponent = new Vue({
                 this.posts = response.data;
 
                 if (loggedUser) {
+                    console.log(loggedUser);
                     // for each post, check if logged in user already liked it (to color in the icons)
                     for (let i=0; i < this.posts.length; i++) {
                         if (this.posts[i].likedBy.includes(loggedUser)) {
                             this.posts[i].liked = true
                         }
+                        // axios.get(`http://localhost:3000/users/${this.posts[i].likedBy}/json`).then(response => {
+
+                        // });
                     }
                 }     
         })
