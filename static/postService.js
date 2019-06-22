@@ -12,19 +12,26 @@ Vue.component('posts', {
             {{post.likedBy.length}} 
             </span>
             <span class='comments'>
-            <i class='far fa-comment-dots ml-3'></i>
+            <i class='far fa-comment-dots ml-3' v-on:click='commentPost(post)'></i>
             {{post.comments.length}}
             </span>
             <p> {{post.likedBy}}</p> 
+            <p> {{post.comments}}</p>
         </div>
     `,
     methods: {
-        likePost(post) {
+        addLoggedUser(user, funcName, post) {
             // adding properties to the post object by getting post prop values
-            if (this.loggedUser) { // if there is a user logged in, create prop in post object
-                post.loggedUser = this.loggedUser 
+            if (user) { // if there is a user logged in, create prop in post object
+                post.loggedUser = user
             }
-            this.$emit('like-post', this.post)
+            this.$emit(funcName, this.post)
+        },
+        likePost(post) {
+            this.addLoggedUser(this.loggedUser, 'like-post', post);
+        },
+        commentPost(post) {
+            this.addLoggedUser(this.loggedUser, 'comment-post', post);
         },
         formatCompat(dateStr) { // formats mongoose date string into something nicer
             let date = new Date(dateStr);
@@ -33,6 +40,42 @@ Vue.component('posts', {
         }
     }
 });
+
+Vue.component('modal', {
+    props: ['post'],
+    template: `
+        <transition name="modal">
+        <div class="modal-mask">
+        <div class="modal-wrapper">
+            <div class="modal-container">
+
+            <div class="modal-header">
+                <slot name="header">
+                Comment on {{post.postedBy}}'s post!
+                </slot>
+            </div>
+
+            <div class="modal-body">
+                <slot name="body">
+                default body
+                </slot>
+            </div>
+
+            <div class="modal-footer">
+                <slot name="footer">
+                default footer
+                <button class="modal-default-button" @click="$emit('close')">
+                    OK
+                </button>
+                </slot>
+            </div>
+            </div>
+        </div>
+        </div>
+    </transition>
+    
+    `
+})
 
 // updates the list of likes by updating the db and replacing the db's array of likes with the current one
 function updatedLikeList(post) {
@@ -47,7 +90,8 @@ const postComponent = new Vue({
     el: '#posts',
 
     data: {
-        posts: null
+        posts: null,
+        showModal: false
     },
 
     methods: {
@@ -61,6 +105,14 @@ const postComponent = new Vue({
             } else if (!post.liked) { //user unliking the post
                 post.likedBy.pop();
                 updatedLikeList(post);
+            }
+        },
+
+        comment(post) {
+            if (post.loggedUser) {
+                this.showModal = !this.showModal;
+            } else {
+                alert('You must be logged in to like or comment on a post');
             }
         }
     },

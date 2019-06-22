@@ -135,6 +135,7 @@ router.get('/logout', (req, res, next) => {
 router.get('/:username', function(req, res, next) {
   User.find({username: req.params.username}, 'bio username imageURL')
       .exec(function(err, users) {
+       
         if (err) return next(err); 
         if (users.length === 0) {
           err = new Error('User does not exist');
@@ -143,15 +144,16 @@ router.get('/:username', function(req, res, next) {
         }
 
         else {
-          const username = req.params.username;
-          const bio = users[0].bio;
           let loggedUser = null;
-          
-          if (req.user) { // if user is logged in, use session var
+          const bio = users[0].bio;
+          let username = req.params.username;
+
+          if (req.user) { // if user is logged in, use session var to create a client-side user object (omitting email/password)
+              
             const imageURL = req.user.imageURL;
             const bio = req.user.bio;
             const _id = req.user.id;
-            
+            const username = req.user.username;
             loggedUser = {
               imageURL,
               bio,
@@ -159,6 +161,7 @@ router.get('/:username', function(req, res, next) {
               username 
             }
           } 
+      
           return res.render('profile', {username, bio, loggedUser});
         }
       });
