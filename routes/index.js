@@ -11,18 +11,24 @@ router.get('*', function(req, res, next) {
 });
 
 // GET /
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
+  const title = 'Home'
   return res.render('index', {
-    title: 'Home'
+    title
   });
+  
 });
 
 // GET /dashboard
-router.get('/dashboard', ensureAuthenticated, function(req, res, next) {
+router.get('/dashboard', ensureAuthenticated, function(req, res) {
+  const title= `${req.user.username} | Dashboard`;
+  const username = req.user.username;
+  
   return res.render('dashboard', {
-    title: 'Dashboard',
-    username: req.user.username
-   });
+    title,
+    username
+  });
+
 });
 
 module.exports = router;
