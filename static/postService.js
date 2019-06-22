@@ -5,7 +5,7 @@ Vue.component('posts', {
     template: `
         <div class='blog-post py-2'>
             <h3> {{post.title}} </h3>
-            <h6> Posted by {{post.postedBy}} </h6>
+            <h6> Posted by {{post.postedBy}} on {{formatCompat(post.createdAt)}} </h6>
             <div v-html='post.content'></div>
             <span class='likes'>
             <i class='far fa-heart py-2' v-on:click='likePost(post)' v-bind:class='{far: !post.liked, fas: post.liked, colorRed: post.liked}'></i>
@@ -25,6 +25,11 @@ Vue.component('posts', {
                 post.loggedUser = this.loggedUser 
             }
             this.$emit('like-post', this.post)
+        },
+        formatCompat(dateStr) { // formats mongoose date string into something nicer
+            let date = new Date(dateStr);
+            let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${month[date.getMonth()]} ${date.getDate()}  ${date.getFullYear()}` 
         }
     }
 });
