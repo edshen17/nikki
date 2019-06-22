@@ -1,7 +1,7 @@
 Vue.use(VueRouter);
 
 Vue.component('posts', {
-    props: ['post', 'logged' , 'liked', 'loggedUser'],
+    props: ['post', 'loggedUser'],
     template: `
         <div class='blog-post py-2'>
             <h3> {{post.title}} </h3>
@@ -19,10 +19,11 @@ Vue.component('posts', {
         </div>
     `,
     methods: {
-        likePost: function(post) {
+        likePost(post) {
             // adding properties to the post object by getting post prop values
-            post.logged = this.logged;
-            if (this.loggedUser) post.loggedUser = this.loggedUser // if there is a user logged in, create prop on object
+            if (this.loggedUser) { // if there is a user logged in, create prop in post object
+                post.loggedUser = this.loggedUser 
+            }
             this.$emit('like-post', this.post)
         }
     }
@@ -31,33 +32,29 @@ Vue.component('posts', {
 // updates the list of likes by updating the db and replacing the db's array of likes with the current one
 function updatedLikeList(post) {
     axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/like`, {likedBy: post.likedBy})
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+        .catch(function (error) {
+            console.log(error);
+        });
 }
 
       
 const postComponent = new Vue({
     el: '#posts',
-    data: function() {
-        let data = {
-            posts: null
-        }
-        return data;
-    }, 
+
+    data: {
+        posts: null
+    },
+
     methods: {
-        like: function(post) {  
+        like(post) {
             post.liked = !post.liked //likes or unlikes by flipping post.liked property
-            if (post.logged && !post.likedBy.includes(post.loggedUser)) { // if logged in and post has not been liked by this user
+            if (post.loggedUser && !post.likedBy.includes(post.loggedUser)) { // if logged in and post has not been liked by this user
                 post.likedBy.push(JSON.parse(JSON.stringify(post.loggedUser)));
                 updatedLikeList(post);
-            } else if (!post.logged)  {
+            } else if (!post.loggedUser)  {
                 alert('You have to be logged in to like or comment on a post');
             } else if (!post.liked) { //user unliking the post
-                post.likedBy.shift();
+                post.likedBy.pop();
                 updatedLikeList(post);
             }
         }
@@ -67,19 +64,15 @@ const postComponent = new Vue({
             .then(response => {
                 this.posts = response.data;
                 if (loggedUser) {
-                    // for each post, check if logged in user already liked it (to color in the icons)
+                    // for each post, check if loggedUser already liked it (to color in the icons)
                     for (let i = 0; i < this.posts.length; i++) {
-                        console.log(this.posts[i].likedBy)
                         for(let j=0; j < this.posts[i].likedBy.length; j++) {
-                            //console.log(JSON.parse(this.posts[i].likedBy[j]).username === loggedUser.username)
                             if (JSON.parse(this.posts[i].likedBy[j]).username === loggedUser.username) {
                                 this.posts[i].liked = true
+                            } else {
+                                this.posts[i].liked = false;
                             }
                         }
-                       
-                        // axios.get(`http://localhost:3000/users/${this.posts[i].likedBy}/json`).then(response => {
-
-                        // });
                     }
                 }     
         })

@@ -4,15 +4,15 @@ block content
     .container-fluid.pt-4.px-4
     .row
         .col-lg-3.ml-5.py-2
-            p #{username} #{bio} !{JSON.stringify(loggedUser)}
+            p #{username} #{bio}
         .col-lg
             #posts
                 if user                        
                     posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id" 
-                    v-bind:logged='true' v-on:like-post='like' logged-user=loggedUser)
+                    v-on:like-post='like' logged-user=loggedUser)
                 else 
                     posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id" 
-                    v-bind:liked='false' v-bind:logged='false' v-on:like-post='like' logged-user=null)
+                    v-on:like-post='like' logged-user=null)
                 
     script(type="text/javascript"). 
         let username = '#{username}';

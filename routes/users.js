@@ -129,20 +129,28 @@ router.get('/logout', (req, res, next) => {
 // Route for getting a specific user's profile 
 router.get('/:username', function(req, res, next) {
   User.find({username: req.params.username}, 'bio username imageURL')
-      .exec(function(err, user) {
-        let bio = ''
-        let loggedUser = null;
-        if (err) return next(err); // pass req.user.username/other info or make new object and pass along for like rather than loggedUser
-        if (req.user) { // if user is logged in, use session var
-          loggedUser = {
-            imageURL: req.user.imageURL,
-            bio: req.user.bio,
-            _id: req.user.id,
-            username: req.user.username
-          }
-        } 
-        bio = user[0].bio;
-        return res.render('profile', {username: req.params.username, bio: bio, loggedUser: loggedUser});
+      .exec(function(err, users) {
+        if (err) return next(err); 
+        if (users.length === 0) {
+          err = new Error('User does not exist');
+          err.status = 404;
+          return next(err);
+        }
+
+        else {
+          let bio = ''
+          let loggedUser = null;
+          if (req.user) { // if user is logged in, use session var
+            loggedUser = {
+              imageURL: req.user.imageURL,
+              bio: req.user.bio,
+              _id: req.user.id,
+              username: req.user.username
+            }
+          } 
+          bio = users[0].bio;
+          return res.render('profile', {username: req.params.username, bio: bio, loggedUser: loggedUser});
+        }
       });
 });
 
