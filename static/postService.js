@@ -12,11 +12,13 @@ Vue.component('posts', {
             {{post.likedBy.length}} 
             </span>
             <span class='comments'>
-            <i class='far fa-comment-dots ml-3' v-on:click='commentPost(post)'></i>
+            <i class='far fa-comment-dots ml-3' v-on:click='commentPost(post)' data-toggle="modal" data-target="#commentModal"></i>
             {{post.comments.length}}
             </span>
             <p> {{post.likedBy}}</p> 
             <p> {{post.comments}}</p>
+            <p>{{post}}</p>
+            <modal v-if='showModal' v-bind:post='post'>{{post.title}}</modal>
         </div>
     `,
     methods: {
@@ -44,36 +46,27 @@ Vue.component('posts', {
 Vue.component('modal', {
     props: ['post'],
     template: `
-        <transition name="modal">
-        <div class="modal-mask">
-        <div class="modal-wrapper">
-            <div class="modal-container">
-
+    <div>
+        <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
             <div class="modal-header">
-                <slot name="header">
-                Comment on {{post.postedBy}}'s post!
-                </slot>
+            <h5 class="modal-title" id="commentModalLabel">Comment on {{post.postedBy}}'s post!</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
             </div>
-
             <div class="modal-body">
-                <slot name="body">
-                default body
-                </slot>
+            ...
             </div>
-
             <div class="modal-footer">
-                <slot name="footer">
-                default footer
-                <button class="modal-default-button" @click="$emit('close')">
-                    OK
-                </button>
-                </slot>
-            </div>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
         </div>
-    </transition>
-    
+        </div>
+    </div>
     `
 })
 
@@ -110,7 +103,7 @@ const postComponent = new Vue({
 
         comment(post) {
             if (post.loggedUser) {
-                this.showModal = !this.showModal;
+                this.showModal = true;
             } else {
                 alert('You must be logged in to like or comment on a post');
             }
