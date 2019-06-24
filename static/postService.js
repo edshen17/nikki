@@ -49,13 +49,20 @@ Vue.component('modal', {
             message: ''
         }
     },
-    methods: {
-        onSubmit(post, comment) {
-            this.$emit('create-comment', this.post)
+    methods: { 
+        onSubmit(post) {
+       
+            console.log(this.message);
+            axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, 
+                {postedBy: JSON.parse(post.loggedUser), content: this.message })
+            .catch(function (error) {
+                console.log(error);
+            });
+            
         }
     },
     template: `
-        <div class="modal fade" :id="'post' + post._id" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal fade" :id="'post' + post._id" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true" >
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -72,7 +79,7 @@ Vue.component('modal', {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" v-on:click='onSubmit(post, this.message)' class="btn btn-primary">Post Comment!</button>
+                        <button type="button" v-on:click='onSubmit(post)' class="btn btn-primary">Post Comment!</button>
                         <!-- <form action="sendConfirmation.php" id="commentForm" name="commentForm" method="post">
                             <input type="submit" value="Post Comment!" class="btn btn-primary">
                         </form>  
@@ -114,12 +121,11 @@ const postComponent = new Vue({
             if (post.loggedUser && !post.likedBy.includes(post.loggedUser)) { // if logged in and post has not been liked by this user
                 post.likedBy.push(JSON.parse(JSON.stringify(post.loggedUser)));
                 updatedLikeList(post);
-            } else if (!post.loggedUser)  {
-                alert('You have to be logged in to like or comment on a post');
             } else if (!post.liked) { //user unliking the post
                 post.likedBy.pop();
                 updatedLikeList(post);
             }
+                this.show(post);
         },
 
         show(post) {

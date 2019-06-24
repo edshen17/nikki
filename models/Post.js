@@ -5,7 +5,7 @@ const User = require('../models/User');
 
 const CommentSchema = new Schema({
   postedBy: {
-    type: String,
+    type: User,
     required: true
   },
   content: {
@@ -14,7 +14,7 @@ const CommentSchema = new Schema({
   },
   createdAt: {type: Date, default: Date.now},
   editedAt: {type: Date, default: Date.now},
-  likedBy: [String]
+  likedBy: [User]
 });
 
 // Edit a schema
