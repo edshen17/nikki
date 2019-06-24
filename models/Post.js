@@ -38,7 +38,7 @@ const PostSchema = new Schema({
   },
   createdAt: {type: Date, default: Date.now},
   comments: [{ type: Schema.Types.ObjectId, ref: 'CommentSchema' }],
-  likedBy: [String]
+  likedBy: [User]
 });
 
 // PostSchema.pre('save', function(next) {

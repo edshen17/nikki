@@ -51,10 +51,11 @@ Vue.component('modal', {
     },
     methods: { 
         onSubmit(post) {
-       
-            console.log(this.message);
             axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, 
                 {postedBy: JSON.parse(post.loggedUser), content: this.message })
+            .then(res => {
+                post.comments.push(JSON.parse(JSON.stringify(res.data)));
+            })
             .catch(function (error) {
                 console.log(error);
             });

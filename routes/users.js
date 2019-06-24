@@ -238,14 +238,23 @@ router.delete('/:username/posts/:id', function(req, res, next) {
 // POST /users/:username/posts/comment
 // Route for creating a comment for a specific post
 router.post('/:username/posts/:id/comment', function(req, res, next) {
-  const postedBy = req.body.postedBy;
-  const content = req.body.content;
-  const comment = new Comment({ postedBy, content });
-  console.log(comment);
-  comment.save(function(err, comment) {
-    if (err) return next(err);
-    res.status(201).send(comment);
-  });
+  // if (req.comments) {
+  //   Post.findById(req.params.username, function(err, post) {
+  //     if (err) return next(err);
+
+
+  //   });
+  // } else {
+    const postedBy = req.body.postedBy;
+    const content = req.body.content;
+    const comment = new Comment({ postedBy, content });
+    comment.save(function(err, comment) {
+      if (err) return next(err);
+      res.status(200).json(comment);
+    });
+  // }
+  
+  
 });
 
 // PUT /users/:username/posts/:id/:cid
