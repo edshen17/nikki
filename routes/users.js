@@ -238,13 +238,16 @@ router.delete('/:username/posts/:id', function(req, res, next) {
 // POST /users/:username/posts/comment
 // Route for creating a comment for a specific post
 router.post('/:username/posts/:id/comment', function(req, res, next) {
-  // if (req.comments) {
-  //   Post.findById(req.params.username, function(err, post) {
-  //     if (err) return next(err);
-
-
-  //   });
-  // } else {
+  if (req.body.comments) { // if we already made the comment and are updating the comments array
+    Post.findById(req.params.id, function(err, post) {
+      if (err) return next(err);
+      post.comments = req.body.comments;
+      post.save(function(err, post) {
+        if (err) return next(err);
+        res.status(200).json(post);
+      });
+    });
+  } else {
     const postedBy = req.body.postedBy;
     const content = req.body.content;
     const comment = new Comment({ postedBy, content });
@@ -252,7 +255,7 @@ router.post('/:username/posts/:id/comment', function(req, res, next) {
       if (err) return next(err);
       res.status(200).json(comment);
     });
-  // }
+  }
   
   
 });

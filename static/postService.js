@@ -55,6 +55,7 @@ Vue.component('modal', {
                 {postedBy: JSON.parse(post.loggedUser), content: this.message })
             .then(res => {
                 post.comments.push(JSON.parse(JSON.stringify(res.data)));
+                updatedCommentList(post)
             })
             .catch(function (error) {
                 console.log(error);
@@ -93,7 +94,7 @@ Vue.component('modal', {
 })
 
 // update comments array (will refactor later)
-function updateCommentList(post) {
+function updatedCommentList(post) {
     axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, {comments: post.comments})
     .catch(function (error) {
         console.log(error);
