@@ -224,7 +224,7 @@ router.post('/:username/posts/:id/like', function(req, res, next) {
   });  
 });
 
-// DELETE /users/:username/post/:id
+// DELETE /users/:username/posts/:id/
 // Route for deleting a specific post
 router.delete('/:username/posts/:id', function(req, res, next) {
   req.post.remove(function(err) {
@@ -232,6 +232,20 @@ router.delete('/:username/posts/:id', function(req, res, next) {
       if (err) return next(err);
       res.status(200).send()
     });
+  });
+});
+
+// POST /users/:username/posts/comment
+// Route for creating a comment for a specific user
+router.post('/:username/posts/:id/comment', function(req, res, next) {
+  const postedBy = req.params.username;
+  const title = req.body.title;
+  const content = req.body.content;
+  const post = new Post({ postedBy, title, content });
+
+  post.save(function(err, post) {
+    if (err) return next(err);
+    res.status(201).send(post);
   });
 });
 

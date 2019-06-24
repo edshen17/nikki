@@ -12,12 +12,12 @@ Vue.component('posts', {
             {{post.likedBy.length}} 
             </span>
             <span class='comments'>
-            <i class='far fa-comment-dots ml-3' v-on:click='commentPost(post)' data-toggle="modal" :data-target="'#post' + post._id"></i>
+            <i class='far fa-comment-dots ml-3' v-on:click='showModal(post)' data-toggle="modal" :data-target="'#post' + post._id"></i>
             {{post.comments.length}}
             </span>
             <p> {{post.likedBy}}</p> 
             <p> {{post.comments}}</p>
-            <modal v-if='loggedUser' v-bind:post='post' v-bind:title='post.title'></modal>
+            <modal v-if='loggedUser' v-bind:post='post'></modal>
         </div>
     `,
     methods: {
@@ -31,8 +31,8 @@ Vue.component('posts', {
         likePost(post) {
             this.addLoggedUser(this.loggedUser, 'like-post', post);
         },
-        commentPost(post) {
-            this.addLoggedUser(this.loggedUser, 'comment-post', post);
+        showModal(post) {
+            this.addLoggedUser(this.loggedUser, 'show-modal', post);
         },
         formatCompat(dateStr) { // formats mongoose date string into something nicer
             let date = new Date(dateStr);
@@ -43,29 +43,54 @@ Vue.component('posts', {
 });
 
 Vue.component('modal', {
-    props: ['post', 'title'],
+    props: ['post'],
+    data() {
+        return {
+            message: ''
+        }
+    },
+    methods: {
+        onSubmit(post, comment) {
+            this.$emit('create-comment', this.post)
+        }
+    },
     template: `
         <div class="modal fade" :id="'post' + post._id" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="commentModalLabel">Comment on {{post.postedBy}}'s post! ({{title}})</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="commentModalLabel">Comment on {{post.postedBy}}'s post! ({{post.title}})</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <span>Your comment will look like this:</span>
+                    <p class='userComment'>{{ message }}</p>
+                    <br>
+                    <textarea id='commentText' name='commentText' form="commentForm" class="form-control" v-model="message" placeholder="Comment"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" v-on:click='onSubmit(post, this.message)' class="btn btn-primary">Post Comment!</button>
+                        <!-- <form action="sendConfirmation.php" id="commentForm" name="commentForm" method="post">
+                            <input type="submit" value="Post Comment!" class="btn btn-primary">
+                        </form>  
+                        -->                      
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-            ...
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-        </div>
         </div>
     `
 })
+
+// update comments array (will refactor later)
+function updateCommentList(post) {
+    axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, {comments: post.comments})
+    .catch(function (error) {
+        console.log(error);
+    });
+}
 
 // updates the list of likes by updating the db and replacing the db's array of likes with the current one
 function updatedLikeList(post) {
@@ -97,12 +122,10 @@ const postComponent = new Vue({
             }
         },
 
-        comment(post) {
-            if (post.loggedUser) {
-                this.showModal = true;
-            } else {
+        show(post) {
+            if (!post.loggedUser) {
                 alert('You must be logged in to like or comment on a post');
-            }
+            } 
         }
     },
     mounted () {
