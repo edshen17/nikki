@@ -12,13 +12,12 @@ Vue.component('posts', {
             {{post.likedBy.length}} 
             </span>
             <span class='comments'>
-            <i class='far fa-comment-dots ml-3' v-on:click='commentPost(post)' data-toggle="modal" data-target="#commentModal"></i>
+            <i class='far fa-comment-dots ml-3' v-on:click='commentPost(post)' data-toggle="modal" :data-target="'#post' + post._id"></i>
             {{post.comments.length}}
             </span>
             <p> {{post.likedBy}}</p> 
             <p> {{post.comments}}</p>
-            <p>{{post}}</p>
-            <modal v-if='showModal' v-bind:post='post'>{{post.title}}</modal>
+            <modal v-if='loggedUser' v-bind:post='post' v-bind:title='post.title'></modal>
         </div>
     `,
     methods: {
@@ -44,14 +43,13 @@ Vue.component('posts', {
 });
 
 Vue.component('modal', {
-    props: ['post'],
+    props: ['post', 'title'],
     template: `
-    <div>
-        <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal fade" :id="'post' + post._id" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="commentModalLabel">Comment on {{post.postedBy}}'s post!</h5>
+            <h5 class="modal-title" id="commentModalLabel">Comment on {{post.postedBy}}'s post! ({{title}})</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -66,7 +64,6 @@ Vue.component('modal', {
         </div>
         </div>
         </div>
-    </div>
     `
 })
 
@@ -83,8 +80,7 @@ const postComponent = new Vue({
     el: '#posts',
 
     data: {
-        posts: null,
-        showModal: false
+        posts: null
     },
 
     methods: {
@@ -128,4 +124,3 @@ const postComponent = new Vue({
         })
     }
 });
-
