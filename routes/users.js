@@ -66,20 +66,20 @@ router.post('/register', (req, res) => {
   // Check if user did not fill out all inputs
   if (!username || !email || !password || !password2) {
     errors.push({
-      msg: 'Please fill out all fields'
+      msg: 'Please fill out all fields',
     });
   }
 
   // Check passwords
   if (password !== password2) {
     errors.push({
-      msg: 'Passwords do not match!'
+      msg: 'Passwords do not match!',
     });
   }
 
   if (password.length < 6) {
     errors.push({
-      msg: 'Password should be at least 6 characters long'
+      msg: 'Password should be at least 6 characters long',
     });
   }
 
@@ -100,7 +100,7 @@ router.post('/register', (req, res) => {
         if (user) {
           // user exists
           errors.push({
-            msg: 'A user with that email already exists'
+            msg: 'A user with that email already exists',
           });
           res.render('register', {
             errors,
@@ -184,7 +184,7 @@ router.get('/:username', (req, res, next) => {
       return res.render('profile', {
         username,
         bio,
-        loggedUser
+        loggedUser,
       });
     });
 });
@@ -271,7 +271,7 @@ router.post('/:username/posts/:id/comment', (req, res, next) => {
   if (req.body.comments) { // if we already made the comment and are updating the comments array
     Post.findById(req.params.id, (err, post) => {
       if (err) return next(err);
-      post.comments = req.body.comments;
+      post.comments = req.body.comments; 
       post.save(() => {
         if (err) return next(err);
         res.status(200).json(post);
@@ -282,7 +282,7 @@ router.post('/:username/posts/:id/comment', (req, res, next) => {
     const content = req.body.content;
     const comment = new Comment({
       postedBy,
-      content
+      content,
     });
     comment.save((err) => {
       if (err) return next(err);

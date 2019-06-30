@@ -26,9 +26,9 @@ Vue.component('posts', {
         addLoggedUser(user, funcName, post) {
             // adding properties to the post object by getting post prop values
             if (user) { // if there is a user logged in, create prop in post object
-                post.loggedUser = user
+                post.loggedUser = JSON.parse(user);
             }
-            this.$emit(funcName, this.post)
+            this.$emit(funcName, this.post); 
         },
         likePost(post) {
             this.addLoggedUser(this.loggedUser, 'like-post', post);
@@ -39,7 +39,7 @@ Vue.component('posts', {
         formatCompat(dateStr) { // formats mongoose date string into something nicer
             let date = new Date(dateStr);
             let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `${month[date.getMonth()]} ${date.getDate()}  ${date.getFullYear()}`
+            return `${month[date.getMonth()]} ${date.getDate()}  ${date.getFullYear()}`;
         }
     }
 });
@@ -48,18 +48,18 @@ Vue.component('modal', {
     props: ['post'],
     data() {
         return {
-            message: ''
+            message: '',
         }
     },
     methods: {
         onSubmit(post) {
             axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, {
-                    postedBy: JSON.parse(post.loggedUser),
-                    content: this.message
+                    postedBy: post.loggedUser,
+                    content: this.message,
                 })
                 .then(res => {
-                    post.comments.push(JSON.parse(JSON.stringify(res.data)));
-                    updatedCommentList(post)
+                    post.comments.push(res.data);
+                    updatedCommentList(post);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -100,7 +100,7 @@ Vue.component('modal', {
 // update comments array (will refactor later)
 function updatedCommentList(post) {
     axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, {
-            comments: post.comments
+            comments: post.comments,
         })
         .catch(function (error) {
             console.log(error);
@@ -110,7 +110,7 @@ function updatedCommentList(post) {
 // updates the list of likes by updating the db and replacing the db's array of likes with the current one
 function updatedLikeList(post) {
     axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/like`, {
-            likedBy: post.likedBy
+            likedBy: post.likedBy,
         })
         .catch(function (error) {
             console.log(error);
@@ -122,16 +122,18 @@ const postComponent = new Vue({
     el: '#posts',
 
     data: {
-        posts: null
+        posts: null,
     },
 
     methods: {
         like(post) {
-            post.liked = !post.liked //likes or unlikes by flipping post.liked property
-            if (post.loggedUser && !post.likedBy.includes(post.loggedUser)) { // if logged in and post has not been liked by this user
-                post.likedBy.push(JSON.parse(JSON.stringify(post.loggedUser)));
+            
+            if (post.loggedUser && !post.liked) { // if logged in and post has not been liked by this user
+                post.liked = !post.liked //likes or unlikes by flipping post.liked property
+                post.likedBy.push(post.loggedUser);
                 updatedLikeList(post);
-            } else if (!post.liked) { //user unliking the post
+            } else if (post.liked) { //user unliking the post
+                post.liked = !post.liked 
                 post.likedBy.pop();
                 updatedLikeList(post);
             }
@@ -151,11 +153,11 @@ const postComponent = new Vue({
                 if (loggedUser) {
                     // for each post, check if loggedUser already liked it (to color in the icons)
                     for (let i = 0; i < this.posts.length; i++) {
+                        console.log(this.posts[i].likedBy.includes(loggedUser))
+                        // console.log(this.posts[i].likedBy.filter(likedUser => likedUser.username === loggedUser.username))
                         for (let j = 0; j < this.posts[i].likedBy.length; j++) {
-                            if (JSON.parse(this.posts[i].likedBy[j]).username === loggedUser.username) {
-                                this.posts[i].liked = true
-                                console.log(this.posts[i].liked);
-
+                            if (this.posts[i].likedBy[j].username === loggedUser.username) {
+                                this.posts[i].liked = true;
                             } else {
                                 this.posts[i].liked = false;
                             }
