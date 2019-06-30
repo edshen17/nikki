@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 Vue.use(VueRouter);
 
 Vue.component('posts', {
@@ -37,7 +39,7 @@ Vue.component('posts', {
         formatCompat(dateStr) { // formats mongoose date string into something nicer
             let date = new Date(dateStr);
             let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `${month[date.getMonth()]} ${date.getDate()}  ${date.getFullYear()}` 
+            return `${month[date.getMonth()]} ${date.getDate()}  ${date.getFullYear()}`
         }
     }
 });
@@ -49,18 +51,20 @@ Vue.component('modal', {
             message: ''
         }
     },
-    methods: { 
+    methods: {
         onSubmit(post) {
-            axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, 
-                {postedBy: JSON.parse(post.loggedUser), content: this.message })
-            .then(res => {
-                post.comments.push(JSON.parse(JSON.stringify(res.data)));
-                updatedCommentList(post)
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-            
+            axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, {
+                    postedBy: JSON.parse(post.loggedUser),
+                    content: this.message
+                })
+                .then(res => {
+                    post.comments.push(JSON.parse(JSON.stringify(res.data)));
+                    updatedCommentList(post)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
         }
     },
     template: `
@@ -95,21 +99,25 @@ Vue.component('modal', {
 
 // update comments array (will refactor later)
 function updatedCommentList(post) {
-    axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, {comments: post.comments})
-    .catch(function (error) {
-        console.log(error);
-    });
-}
-
-// updates the list of likes by updating the db and replacing the db's array of likes with the current one
-function updatedLikeList(post) {
-    axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/like`, {likedBy: post.likedBy})
+    axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, {
+            comments: post.comments
+        })
         .catch(function (error) {
             console.log(error);
         });
 }
 
-      
+// updates the list of likes by updating the db and replacing the db's array of likes with the current one
+function updatedLikeList(post) {
+    axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/like`, {
+            likedBy: post.likedBy
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
+
+
 const postComponent = new Vue({
     el: '#posts',
 
@@ -127,31 +135,33 @@ const postComponent = new Vue({
                 post.likedBy.pop();
                 updatedLikeList(post);
             }
-                this.show(post);
+            this.show(post);
         },
 
         show(post) {
             if (!post.loggedUser) {
                 alert('You must be logged in to like or comment on a post');
-            } 
+            }
         }
     },
-    mounted () {
+    mounted() {
         axios.get(`http://localhost:3000/users/${username}/posts`)
             .then(response => {
                 this.posts = response.data;
                 if (loggedUser) {
                     // for each post, check if loggedUser already liked it (to color in the icons)
                     for (let i = 0; i < this.posts.length; i++) {
-                        for(let j=0; j < this.posts[i].likedBy.length; j++) {
+                        for (let j = 0; j < this.posts[i].likedBy.length; j++) {
                             if (JSON.parse(this.posts[i].likedBy[j]).username === loggedUser.username) {
                                 this.posts[i].liked = true
+                                console.log(this.posts[i].liked);
+
                             } else {
                                 this.posts[i].liked = false;
                             }
                         }
                     }
-                }     
-        })
+                }
+            })
     }
 });

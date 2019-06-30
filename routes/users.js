@@ -4,10 +4,18 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require('../models/User');
-const { Post } = require('../models/Post');
-const { Comment } = require('../models/Post');
-const { ensureAuthenticated } = require('../config/auth');
-const { ObjectId } = require('mongoose').Types;
+const {
+  Post,
+} = require('../models/Post');
+const {
+  Comment,
+} = require('../models/Post');
+const {
+  ensureAuthenticated,
+} = require('../config/auth');
+const {
+  ObjectId,
+} = require('mongoose').Types;
 
 
 // Accesses the id param and searches posts by id
@@ -48,22 +56,31 @@ router.get('/register', (req, res) => {
 // Making a user in the db
 router.post('/register', (req, res) => {
   const {
-    username, email, password, password2,
+    username,
+    email,
+    password,
+    password2,
   } = req.body;
   const errors = [];
 
   // Check if user did not fill out all inputs
   if (!username || !email || !password || !password2) {
-    errors.push({ msg: 'Please fill out all fields' });
+    errors.push({
+      msg: 'Please fill out all fields'
+    });
   }
 
   // Check passwords
   if (password !== password2) {
-    errors.push({ msg: 'Passwords do not match!' });
+    errors.push({
+      msg: 'Passwords do not match!'
+    });
   }
 
   if (password.length < 6) {
-    errors.push({ msg: 'Password should be at least 6 characters long' });
+    errors.push({
+      msg: 'Password should be at least 6 characters long'
+    });
   }
 
   if (errors.length > 0) {
@@ -76,11 +93,15 @@ router.post('/register', (req, res) => {
     });
   } else {
     // Validation
-    User.findOne({ email })
+    User.findOne({
+      email,
+    })
       .then((user) => {
         if (user) {
           // user exists
-          errors.push({ msg: 'A user with that email already exists' });
+          errors.push({
+            msg: 'A user with that email already exists'
+          });
           res.render('register', {
             errors,
             username,
@@ -101,7 +122,7 @@ router.post('/register', (req, res) => {
             newUser.password = hash;
             newUser.save()
               .then(() => {
-                req.login(user, (err) => {
+                req.login(() => {
                   if (err) {
                     console.log(err);
                   } else {
@@ -134,7 +155,9 @@ router.get('/logout', (req, res) => {
 // GET /users/:username
 // Route for getting a specific user's profile
 router.get('/:username', (req, res, next) => {
-  User.find({ username: req.params.username }, 'bio username imageURL')
+  User.find({
+    username: req.params.username,
+  }, 'bio username imageURL')
     .exec((err, users) => {
       if (err) return next(err);
       if (users.length === 0) {
@@ -144,7 +167,7 @@ router.get('/:username', (req, res, next) => {
       }
       let loggedUser = null;
       const bio = users[0].bio;
-      const username  = req.params.username;
+      const username = req.params.username;
 
       if (req.user) { // if user is logged in, use session var to create a client-side user object (omitting email/password)           
         const imageURL = req.user.imageURL;
@@ -158,14 +181,20 @@ router.get('/:username', (req, res, next) => {
           username,
         };
       }
-      return res.render('profile', { username, bio, loggedUser });
+      return res.render('profile', {
+        username,
+        bio,
+        loggedUser
+      });
     });
 });
 
 // GET /users/:username/json
 // Route for getting a specific user's json data
 router.get('/:username/json', (req, res, next) => {
-  User.find({ username: req.params.username }, 'bio username imageURL')
+  User.find({
+    username: req.params.username,
+  }, 'bio username imageURL')
     .exec((err, user) => {
       if (err) return next(err);
       return res.status(200).json(user);
@@ -175,8 +204,12 @@ router.get('/:username/json', (req, res, next) => {
 // GET /users/:username/posts
 // Route for getting all the posts of a user
 router.get('/:username/posts', (req, res, next) => {
-  Post.find({ postedBy: req.params.username })
-    .sort({ createdAt: -1 })
+  Post.find({
+    postedBy: req.params.username,
+  })
+    .sort({
+      createdAt: -1,
+    })
     .exec((err, posts) => {
       if (err) return next(err);
       res.status(200).json(posts);
@@ -186,7 +219,7 @@ router.get('/:username/posts', (req, res, next) => {
 
 // GET /users/:username/posts/:id
 // Route for getting a specific post
-router.get('/:username/posts/:id', (req, res, next) => {
+router.get('/:username/posts/:id', (req, res) => {
   res.send(req.post);
 });
 
@@ -196,9 +229,13 @@ router.post('/:username/posts', (req, res, next) => {
   const postedBy = req.params.username;
   const title = req.body.title;
   const content = req.body.content;
-  const post = new Post({ postedBy, title, content });
+  const post = new Post({
+    postedBy,
+    title,
+    content,
+  });
 
-  post.save((err, post) => {
+  post.save((err) => {
     if (err) return next(err);
     res.status(201).send(post);
   });
@@ -243,7 +280,10 @@ router.post('/:username/posts/:id/comment', (req, res, next) => {
   } else {
     const postedBy = req.body.postedBy;
     const content = req.body.content;
-    const comment = new Comment({ postedBy, content });
+    const comment = new Comment({
+      postedBy,
+      content
+    });
     comment.save((err) => {
       if (err) return next(err);
       res.status(200).json(comment);
