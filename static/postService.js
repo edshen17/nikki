@@ -9,16 +9,19 @@ Vue.component('posts', {
             <h3> {{post.title}} </h3>
             <h6> Posted by {{post.postedBy}} on {{formatCompat(post.createdAt)}} </h6>
             <div v-html='post.content'></div>
+                <p> {{post.likedBy}}</p> 
+                <p> {{post.comments}}</p>
             <span class='likes'>
-            <i class='far fa-heart py-2' v-on:click='likePost(post)' v-bind:class='{far: !post.liked, fas: post.liked, colorRed: post.liked}'></i>
-            {{post.likedBy.length}} 
+                <i class='far fa-heart py-2' v-on:click='likePost(post)' v-bind:class='{far: !post.liked, fas: post.liked, colorRed: post.liked}'></i>
+                {{post.likedBy.length}} 
             </span>
             <span class='comments'>
-            <i class='far fa-comment-dots ml-3' v-on:click='showModal(post)' data-toggle="modal" :data-target="'#post' + post._id"></i>
-            {{post.comments.length}}
+                <i class='far fa-comment-dots ml-2' v-on:click='showModal(post)' data-toggle="modal" :data-target="'#post' + post._id"></i>
+                {{post.comments.length}}
             </span>
-            <p> {{post.likedBy}}</p> 
-            <p> {{post.comments}}</p>
+            <span class='more'>
+                <i class='fas fa-chevron-down ml-2'></i>
+            </span>
             <modal v-if='loggedUser' v-bind:post='post'></modal>
         </div>
     `,
@@ -153,10 +156,8 @@ const postComponent = new Vue({
                 if (loggedUser) {
                     // for each post, check if loggedUser already liked it (to color in the icons)
                     for (let i = 0; i < this.posts.length; i++) {
-                        console.log(this.posts[i].likedBy.includes(loggedUser))
-                        // console.log(this.posts[i].likedBy.filter(likedUser => likedUser.username === loggedUser.username))
                         for (let j = 0; j < this.posts[i].likedBy.length; j++) {
-                            if (this.posts[i].likedBy[j].username === loggedUser.username) {
+                            if (this.posts[i].likedBy.some(likedUser => likedUser.username === loggedUser.username)) {
                                 this.posts[i].liked = true;
                             } else {
                                 this.posts[i].liked = false;
