@@ -9,10 +9,10 @@ block content
             #posts
                 if user                        
                     posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id" 
-                    v-on:like-post='like' logged-user=loggedUser v-on:show-modal='show')
+                    v-on:like-post='like' logged-user=loggedUser v-on:show-modal='show' v-on:show-more='more')
                 else 
                     posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id"
-                    v-on:like-post='like' logged-user=null v-on:show-modal='show')
+                    v-on:like-post='like' logged-user=null v-on:show-modal='show' v-on:show-more='show')
     script(type="text/javascript"). 
         let username = '#{username}'; // replace with vue router later
         let loggedUser = !{JSON.stringify(loggedUser)}

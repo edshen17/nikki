@@ -20,7 +20,10 @@ Vue.component('posts', {
                 {{post.comments.length}}
             </span>
             <span class='more'>
-                <i class='fas fa-chevron-down ml-2'></i>
+                <i class="fas fa-chevron-down ml-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-show='loggedUser'>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#" v-on:click='showMore(post)'>Delete post</a>
+                </div>
             </span>
             <modal v-if='loggedUser' v-bind:post='post'></modal>
         </div>
@@ -30,6 +33,7 @@ Vue.component('posts', {
             // adding properties to the post object by getting post prop values
             if (user) { // if there is a user logged in, create prop in post object
                 post.loggedUser = JSON.parse(user);
+                post.isShowing = false;
             }
             this.$emit(funcName, this.post); 
         },
@@ -38,6 +42,9 @@ Vue.component('posts', {
         },
         showModal(post) {
             this.addLoggedUser(this.loggedUser, 'show-modal', post);
+        },
+        showMore(post) {
+            this.addLoggedUser(this.loggedUser, 'show-more', post);
         },
         formatCompat(dateStr) { // formats mongoose date string into something nicer
             let date = new Date(dateStr);
@@ -132,11 +139,11 @@ const postComponent = new Vue({
         like(post) {
             
             if (post.loggedUser && !post.liked) { // if logged in and post has not been liked by this user
-                post.liked = !post.liked //likes or unlikes by flipping post.liked property
+                post.liked = !post.liked; //likes or unlikes by flipping post.liked property
                 post.likedBy.push(post.loggedUser);
                 updatedLikeList(post);
             } else if (post.liked) { //user unliking the post
-                post.liked = !post.liked 
+                post.liked = !post.liked; 
                 post.likedBy.pop();
                 updatedLikeList(post);
             }
@@ -147,6 +154,11 @@ const postComponent = new Vue({
             if (!post.loggedUser) {
                 alert('You must be logged in to like or comment on a post');
             }
+        },
+
+        more(post) {
+            post.isShowing = !post.isShowing;
+            alert(post.isShowing)
         }
     },
     mounted() {
