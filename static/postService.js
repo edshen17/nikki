@@ -139,7 +139,7 @@ const postComponent = new Vue({
         like(post) {
             
             if (post.loggedUser && !post.liked) { // if logged in and post has not been liked by this user
-                post.liked = !post.liked; //likes or unlikes by flipping post.liked property
+                post.liked = !post.liked; // likes or unlikes by flipping post.liked property
                 post.likedBy.push(post.loggedUser);
                 updatedLikeList(post);
             } else if (post.liked) { //user unliking the post
@@ -158,7 +158,16 @@ const postComponent = new Vue({
 
         more(post) {
             post.isShowing = !post.isShowing;
-            alert(post.isShowing)
+            
+            if (confirm(`Are you sure you want to delete this post? (${post.title})`)) {
+                axios.delete(`http://localhost:3000/users/${username}/posts/${post._id}`)
+                .then(res => {
+                    location.reload(); // refresh page
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            } 
         }
     },
     mounted() {

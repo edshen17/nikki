@@ -1,3 +1,3 @@
 module.exports = {
-  MongoURI: 'mongod_uri_goes_here'
+  MongoURI: 'mongodb+srv://edshen17:bluewater2@cluster0-fweqm.mongodb.net/test?retryWrites=true&w=majority'
 }
