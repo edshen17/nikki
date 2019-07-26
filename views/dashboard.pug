@@ -1,17 +1,17 @@
+
+
 extends layout
 
 block content
 
   h1.mt-4 Dashboard
   p.lead.mb-3 Welcome #{username}
-  
-  #formComponent
-    form(method='POST' action='/users/' + username + '/posts')
-      label(for='title') Title
-      input#title(v-model='userTitle' type='text', name='title')
-      label(for='content') Content
-      input#content(v-model='userContent' type='text', name='content')
-      button(type='submit') Submit
-    
-    
 
+  form(method='POST', action='/users/' + username + '/posts')
+    label(for='title') Title
+    input#title(v-model='userTitle' type='text', name='title')
+    textarea(v-model='userContent' name='content' cols='86' rows='20')
+    input.button(type='submit' value='Submit')
+  script(src='http://js.nicedit.com/nicEdit-latest.js', type='text/javascript')
+  script(type='text/javascript').
+    bkLib.onDomLoaded(nicEditors.allTextAreas);
