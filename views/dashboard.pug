@@ -1,17 +1,18 @@
-
-
 extends layout
 
 block content
+    .container-fluid.pt-4.px-4
+    .row
+        .col-lg.mx-auto
+              h1.mt-4.text-center Dashboard
+                  p.lead.mb-3 Welcome #{username}
 
-  h1.mt-4 Dashboard
-  p.lead.mb-3 Welcome #{username}
-
-  form(method='POST', action='/users/' + username + '/posts')
-    label(for='title') Title
-    input#title(v-model='userTitle' type='text', name='title')
-    textarea(v-model='userContent' name='content' cols='86' rows='20')
-    input.button(type='submit' value='Submit')
-  script(src='http://js.nicedit.com/nicEdit-latest.js', type='text/javascript')
-  script(type='text/javascript').
-    bkLib.onDomLoaded(nicEditors.allTextAreas);
+                  form.mx-5(method='POST', action='/users/' + username + '/posts')
+                    label(for='title') Title
+                    input#title(v-model='userTitle' type='text', name='title')
+                    textarea(v-model='userContent' name='content' cols='86' rows='20')
+                    input.button(type='submit' value='Submit')
+    script(src='https://unpkg.com/vue/dist/vue.js')
+    script(src='http://js.nicedit.com/nicEdit-latest.js', type='text/javascript')
+    script(type='text/javascript').
+      bkLib.onDomLoaded(nicEditors.allTextAreas);
