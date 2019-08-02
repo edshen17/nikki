@@ -237,7 +237,7 @@ router.post('/:username/posts', (req, res, next) => {
 
   post.save((err) => {
     if (err) return next(err);
-    res.status(201).send(post);
+    res.status(201).redirect(`/users/${postedBy}`);
   });
 });
 

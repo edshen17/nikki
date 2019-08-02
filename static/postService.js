@@ -12,7 +12,7 @@ Vue.component('posts', {
                 <p> {{post.likedBy}}</p> 
                 <p> {{post.comments}}</p>
             <span class='likes'>
-                <i class='far fa-heart py-2' v-on:click='likePost(post)' v-bind:class='{far: !post.liked, fas: post.liked, colorRed: post.liked}'></i>
+                <i class='far fa-heart py-2' v-on:click='likePost(post)' v-bind:class='{far: !post.liked, fas: post.liked, colorRed: post.liked, animate: post.liked}'></i>
                 {{post.likedBy.length}} 
             </span>
             <span class='comments'>
