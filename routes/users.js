@@ -291,6 +291,17 @@ router.post('/:username/posts/:id/comment', (req, res, next) => {
   }
 });
 
+// PUT /users/:username/posts/:id/
+// Edit a specific post
+router.put('/:username/posts/:id/', (req, res) => {
+  return res.json({
+    response: 'put request to edit a post',
+    postId: req.params.id,
+    commentId: req.params.cid,
+    body: req.body,
+  });
+});
+
 // PUT /users/:username/posts/:id/:cid
 // Edit a specific comment
 // router.put('/:username/posts/:id/:cid', function(req, res, next) {

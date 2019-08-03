@@ -20,9 +20,10 @@ Vue.component('posts', {
                 {{post.comments.length}}
             </span>
             <span class='more'>
-                <i class="fas fa-chevron-down ml-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-show='loggedUser'>
+                <i class="fas fa-chevron-down ml-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-show='loggedUser'></i>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#" v-on:click='showMore(post)'>Delete post</a>
+                  <a class="dropdown-item" id='edit' href="#" v-on:click='showMore(post, $event)'>Edit post</a>
+                  <a class="dropdown-item" id='delete' href="#" v-on:click='showMore(post, $event)'>Delete post</a>
                 </div>
             </span>
             <modal v-if='loggedUser' v-bind:post='post'></modal>
@@ -43,8 +44,9 @@ Vue.component('posts', {
         showModal(post) {
             this.addLoggedUser(this.loggedUser, 'show-modal', post);
         },
-        showMore(post) {
-            this.addLoggedUser(this.loggedUser, 'show-more', post);
+        showMore(post, event) {
+       
+            this.$emit('show-more', this.post, event.currentTarget.id);
         },
         formatCompat(dateStr) { // formats mongoose date string into something nicer
             let date = new Date(dateStr);
@@ -156,10 +158,11 @@ const postComponent = new Vue({
             }
         },
 
-        more(post) {
+        more(post, eventID) {
             post.isShowing = !post.isShowing;
             
-            if (confirm(`Are you sure you want to delete this post? (${post.title})`)) {
+
+            if (eventID === 'delete' && confirm(`Are you sure you want to delete this post? (${post.title})`)) {
                 axios.delete(`http://localhost:3000/users/${username}/posts/${post._id}`)
                 .then(res => {
                     location.reload(); // refresh page
@@ -167,7 +170,8 @@ const postComponent = new Vue({
                 .catch(function (error) {
                     console.log(error);
                 });
-            } 
+            }
+            
         }
     },
     mounted() {
