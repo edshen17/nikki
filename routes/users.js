@@ -189,6 +189,23 @@ router.get('/:username', (req, res, next) => {
     });
 });
 
+// POST /users/:username/
+// Route for editing a user's profile information
+router.post('/:username', (req, res, next) => {
+  User.find({
+    username: req.params.username,
+  })
+    .exec((err, user) => {
+      if (err) return next(err);
+      user.bio = req.body.bio;
+      user.save(() => {
+        if (err) return next(err);
+        res.status(200).send(user);
+      });
+    });
+});
+
+
 // GET /users/:username/json
 // Route for getting a specific user's json data
 router.get('/:username/json', (req, res, next) => {
