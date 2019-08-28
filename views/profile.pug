@@ -3,9 +3,9 @@ extends layout
 block content
     .container-fluid.pt-4.px-4
         .row
-            .col-sm-3.ml-5.py-2
-                p #{username} #{bio}
-            .col-sm-8
+            .col-sm-1
+            .col-sm-10.mx-4   
+                p #{username} #{bio} 
                 #posts
                     if user                        
                         posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id" 
