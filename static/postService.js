@@ -6,11 +6,11 @@ Vue.component('posts', {
     props: ['post', 'loggedUser'],
     template: `
         <div class='blog-post py-2'>
-            <h3> {{post.title}} </h3>
+            <h4 class> {{post.title}} </h4>
             <h6> Posted by {{post.postedBy}} on {{formatCompat(post.createdAt)}} </h6>
-            <div v-html='post.content'></div>
-                <p> {{post.likedBy}}</p> 
-                <p> {{post.comments}}</p>
+            <div v-html='post.content' class='py-2 text'></div>
+                <p> Liked by: {{post.likedBy}}</p> 
+                <p> Comments: {{post.comments}}</p>
             <span class='likes'>
                 <i class='far fa-heart py-2' v-on:click='likePost(post)' v-bind:class='{far: !post.liked, fas: post.liked, colorRed: post.liked, animate: post.liked}'></i>
                 {{post.likedBy.length}} 

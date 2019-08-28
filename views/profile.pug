@@ -2,17 +2,17 @@ extends layout
 
 block content
     .container-fluid.pt-4.px-4
-    .row
-        .col-lg-3.ml-5.py-2
-            p #{username} #{bio}
-        .col-lg
-            #posts
-                if user                        
-                    posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id" 
-                    v-on:like-post='like' logged-user=loggedUser v-on:show-modal='show' v-on:show-more='more')
-                else 
-                    posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id"
-                    v-on:like-post='like' logged-user=null v-on:show-modal='show' v-on:show-more='show')
+        .row
+            .col-sm-3.ml-5.py-2
+                p #{username} #{bio}
+            .col-sm-8
+                #posts
+                    if user                        
+                        posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id" 
+                        v-on:like-post='like' logged-user=loggedUser v-on:show-modal='show' v-on:show-more='more')
+                    else 
+                        posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id"
+                        v-on:like-post='like' logged-user=null v-on:show-modal='show' v-on:show-more='show')
     script(type="text/javascript"). 
         let username = '#{username}'; // replace with vue router later
         let loggedUser = !{JSON.stringify(loggedUser)}
@@ -20,6 +20,3 @@ block content
     script(src='https://unpkg.com/vue-router/dist/vue-router.js')
     script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js')
     script(src='/postService.js')  
-    script(src='http://js.nicedit.com/nicEdit-latest.js', type='text/javascript')
-    script(type='text/javascript').
-      bkLib.onDomLoaded(nicEditors.allTextAreas);

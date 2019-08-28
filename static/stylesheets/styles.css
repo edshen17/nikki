@@ -1,6 +1,14 @@
 .colorRed {
-    color: red;
-    
+    color: red; 
+}
+
+body, h4 {
+  font-family : 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' , '游ゴシック' , '游ゴシック体' , YuGothic , 'Yu Gothic' , 'メイリオ' , Meiryo , 'ＭＳ ゴシック' , 'MS Gothic' , HiraKakuProN-W3 , 'TakaoExゴシック' , TakaoExGothic , 'MotoyaLCedar' , 'Droid Sans Japanese' , sans-serif !important;
+}
+
+.text {
+  font-size: 1.25em;
+  line-height: 2;
 }
 
 .center {
@@ -14,30 +22,3 @@ textarea {
     margin-left: auto;
     margin-right: auto;
 }
-
-/* Parts are from twitter.com */
-
-.HeartAnimation {
-    padding-top: 2em;
-    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/66955/web_heart_animation.png');
-      background-repeat: no-repeat;
-      background-size: 2900%;
-    background-position: left;
-      height: 50px;
-      width: 50px;
-    margin: 0 auto;
-    cursor: pointer;
-  }
-  
-  .animate {
-    animation: heart-burst .8s steps(28) forwards;
-  }
-  
-  @keyframes heart-burst {
-      0% {
-          background-position: left
-      }
-      100% {
-          background-position: right
-      }
-  }
