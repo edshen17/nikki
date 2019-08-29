@@ -45,7 +45,6 @@ Vue.component('posts', {
             this.addLoggedUser(this.loggedUser, 'show-modal', post);
         },
         showMore(post, event) {
-       
             this.$emit('show-more', this.post, event.currentTarget.id);
         },
         formatCompat(dateStr) { // formats mongoose date string into something nicer
@@ -76,6 +75,7 @@ Vue.component('modal', {
                 .catch(function (error) {
                     console.log(error);
                 });
+                post.isShowing = !post.isShowing;
 
         }
     },
@@ -90,18 +90,11 @@ Vue.component('modal', {
                         </button>
                     </div>
                     <div class="modal-body">
-                    <span>Your comment will look like this:</span>
-                    <p class='userComment'>{{ message }}</p>
-                    <br>
-                    <textarea id='commentText' name='commentText' form="commentForm" class="form-control" v-model="message" placeholder="Comment"></textarea>
+                    <textarea id='commentText' name='commentText' form="commentForm"　rows="10" class="form-control" v-model="message" placeholder="Comment"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" v-on:click='onSubmit(post)' class="btn btn-primary">Post Comment!</button>
-                        <!-- <form action="sendConfirmation.php" id="commentForm" name="commentForm" method="post">
-                            <input type="submit" value="Post Comment!" class="btn btn-primary">
-                        </form>  
-                        -->                      
+                        <button type="button" v-on:click='onSubmit(post)' class="btn btn-primary" data-dismiss="modal" aria-label="Close">Post Comment!</button>                 
                     </div>
                 </div>
             </div>

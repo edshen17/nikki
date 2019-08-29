@@ -4,6 +4,9 @@ const Schema = mongoose.Schema;
 const User = require('../models/User');
 
 const CommentSchema = new Schema({
+  parentID: { type: String, 
+    required: true,
+  },
   postedBy: {
     type: User,
     required: true
@@ -14,7 +17,7 @@ const CommentSchema = new Schema({
   },
   createdAt: {type: Date, default: Date.now},
   editedAt: {type: Date, default: Date.now},
-  likedBy: [User]
+  likedBy: [User],
 });
 
 // Edit a schema
@@ -41,10 +44,6 @@ const PostSchema = new Schema({
   likedBy: [User]
 });
 
-// PostSchema.pre('save', function(next) {
-//   this.comments.sort(sortComments;
-//   next();
-// });
 
 const Comment = mongoose.model('Comment', CommentSchema);
 const Post = mongoose.model('Post', PostSchema);

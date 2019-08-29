@@ -1,5 +1,5 @@
+/* eslint-disable */
 const express = require('express');
-
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
@@ -273,12 +273,15 @@ router.post('/:username/posts/:id/like', (req, res, next) => {
 
 // DELETE /users/:username/posts/:id/
 // Route for deleting a specific post
-router.delete('/:username/posts/:id', (req, res, next) => {
+router.delete('/:username/posts/:id', (req, res, next) => {  
   req.post.remove(() => {
-    req.post.save((err) => {
+    var id = req.params.id;
+    Comment.deleteMany({ parentID: id }, (err) => { // deletes all comments in the post as well
       if (err) return next(err);
-      res.status(200).send();
-    });
+      req.post.save(() => {
+        res.status(200).send();
+       });
+    })
   });
 });
 
@@ -294,13 +297,17 @@ router.post('/:username/posts/:id/comment', (req, res, next) => {
         res.status(200).json(post);
       });
     });
-  } else {
+  } else { // creating a new comment
+    const parentID = req.params.id;
     const postedBy = req.body.postedBy;
     const content = req.body.content;
+    
     const comment = new Comment({
+      parentID,
       postedBy,
       content,
     });
+
     comment.save((err) => {
       if (err) return next(err);
       res.status(200).json(comment);
