@@ -1,7 +1,7 @@
 # Nikki (日記)
 This website was inspired by Twitter and HelloTalk. I wanted to make a website where natives and language learners can write and share their ideas in different languages. So far, Nikki has become a semi-blog style website, where users can log in, post content, like other posts, and make comments. This is still a work in progress, so I'd like to add some extra features, such as allowing users to have followers, upload profile pictures, etc. 
 
-The website uses Vue.js, Passport.js, Bootstrap, MongoDB, and was designed RESTfully (API routes at [routes/users.js](../blob/master/LICENSE)). I have yet to complete the REST API and implement API keys/tokens, but users can access their own JSON data and get objects that are structured like Twitter's user/tweet objects. 
+The website uses Vue.js, Passport.js, Bootstrap, MongoDB, and was designed RESTfully (API routes at [routes/users.js](../routes/users.js)). I have yet to complete the REST API and implement API keys/tokens, but users can access their own JSON data and get objects that are structured like Twitter's user/tweet objects. 
 
 ## Getting Started
 
