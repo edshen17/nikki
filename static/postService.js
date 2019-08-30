@@ -154,7 +154,6 @@ const postComponent = new Vue({
         more(post, eventID) {
             post.isShowing = !post.isShowing;
             
-
             if (eventID === 'delete' && confirm(`Are you sure you want to delete this post? (${post.title})`)) {
                 axios.delete(`http://localhost:3000/users/${username}/posts/${post._id}`)
                 .then(res => {

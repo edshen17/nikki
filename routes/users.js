@@ -53,84 +53,71 @@ router.get('/register', (req, res) => {
 });
 
 // POST /users/register
-// Making a user in the db
-router.post('/register', (req, res) => {
-  const {
-    username,
-    email,
-    password,
-    password2,
-  } = req.body;
-  const errors = [];
+router.post('/register', function(req, res, next) {
+  const { username, email, password, password2 } = req.body;
+  let errors = [];
 
   // Check if user did not fill out all inputs
   if (!username || !email || !password || !password2) {
-    errors.push({
-      msg: 'Please fill out all fields',
-    });
+    errors.push({msg: 'Please fill out all fields'})
   }
 
   // Check passwords
   if (password !== password2) {
-    errors.push({
-      msg: 'Passwords do not match!',
-    });
+    errors.push({msg: 'Passwords do not match!'});
   }
 
   if (password.length < 6) {
-    errors.push({
-      msg: 'Password should be at least 6 characters long',
-    });
+    errors.push ({msg: 'Password should be at least 6 characters long'});
   }
 
-  if (errors.length > 0) {
+  if(errors.length > 0) {
     res.render('register', {
       errors,
       username,
       email,
       password,
-      password2,
+      password2
     });
-  } else {
+  }
+
+  else {
     // Validation
-    User.findOne({
-      email,
-    })
-      .then((user) => {
+    User.findOne({ email: email})
+      .then(user => {
         if (user) {
           // user exists
-          errors.push({
-            msg: 'A user with that email already exists',
-          });
-          res.render('register', {
-            errors,
-            username,
-            email,
-            password,
-            password2,
-          });
+            errors.push({msg: 'A user with that email already exists'});
+            res.render('register', {
+              errors,
+              username,
+              email,
+              password,
+              password2
+            });
         } else {
           const newUser = new User({
-            username,
-            email,
-            password,
+            username: username,
+            email: email,
+            password: password
           });
 
           // Hash password
-          bcrypt.genSalt(10, (err, salt) => bcrypt.hash(newUser.password, salt, (hash) => {
-            if (err) throw err;
-            newUser.password = hash;
-            newUser.save()
-              .then(() => {
-                req.login(() => {
-                  if (err) {
-                    console.log(err);
-                  } else {
-                    return res.redirect('/dashboard');
-                  }
-                });
-              })
-              .catch(console.log(err));
+          bcrypt.genSalt(10, (err, salt) =>
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+              if (err) throw err;
+              newUser.password = hash;
+              newUser.save()
+                .then(user => {
+                  req.login(user, function(err) {
+                    if (err) {
+                      console.log(err);
+                    } else {
+                      return res.redirect('/dashboard');
+                    }
+                  })
+                })
+                .catch(err => console.log(err));
           }));
         }
       });
@@ -211,7 +198,7 @@ router.post('/:username', (req, res, next) => {
 router.get('/:username/json', (req, res, next) => {
   User.find({
     username: req.params.username,
-  }, 'bio username imageURL')
+  }, 'bio username imageURL followers follwer_count following following_count comments comment_count posts post_count')
     .exec((err, user) => {
       if (err) return next(err);
       return res.status(200).json(user);
@@ -276,7 +263,7 @@ router.post('/:username/posts/:id/like', (req, res, next) => {
 router.delete('/:username/posts/:id', (req, res, next) => {  
   req.post.remove(() => {
     var id = req.params.id;
-    Comment.deleteMany({ parentID: id }, (err) => { // deletes all comments in the post as well
+    Comment.deleteMany({ parentID: id }, (err) => { // deletes all comments in the post as well 
       if (err) return next(err);
       req.post.save(() => {
         res.status(200).send();
