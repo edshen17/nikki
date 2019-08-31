@@ -9,7 +9,7 @@ block content
                 #posts
                     if user                        
                         posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id" 
-                        v-on:like-post='like' logged-user=loggedUser v-on:show-modal='show' v-on:show-more='more')
+                        v-on:show-more='more' v-on:like-post='like' logged-user=loggedUser v-on:show-modal='show')
                     else 
                         posts(name=username, v-for='post in posts' v-bind:post='post' v-bind:key="post.id"
                         v-on:like-post='like' logged-user=null v-on:show-modal='show' v-on:show-more='show')

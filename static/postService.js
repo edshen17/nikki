@@ -8,11 +8,20 @@ Vue.component('posts', {
         <div class='blog-post py-2'>
             <h4 class> {{post.title}} </h4>
             <h6> Posted by {{post.postedBy}} on {{formatCompat(post.createdAt)}} </h6>
-            <div v-html='post.content' class='py-2 text'></div>
+            <div v-if='!post.isEditing' v-html='post.content' class='py-2 text'></div>
+            <div class="md-form">
+            <textarea class="md-textarea form-control" rows="15" :value='post.content' :disabled='!post.isEditing' v-if='post.isEditing'></textarea>
+            </div>
+            <div class='edit'>
+                <button v-if="post.isEditing" class='btn btn-primary'>
+                     Save
+                </button>
+                <button class='btn btn-secondary' v-if="post.isEditing" @click="post.isEditing = false; post.likedBy.push();">Cancel</button>
+            </div>
                 <p> Liked by: {{post.likedBy}}</p> 
                 <p> Comments: {{post.comments}}</p>
             <span class='likes'>
-                <i class='far fa-heart py-2' v-on:click='likePost(post)' v-bind:class='{far: !post.liked, fas: post.liked, colorRed: post.liked, animate: post.liked}'></i>
+                <i class='far fa-heart py-2' v-on:click='likePost(post)' v-bind:class='{far: !post.liked, fas: post.liked, colorRed: post.liked}'></i>
                 {{post.likedBy.length}} 
             </span>
             <span class='comments'>
@@ -22,21 +31,21 @@ Vue.component('posts', {
             <span class='more'>
                 <i class="fas fa-chevron-down ml-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-show='loggedUser'></i>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" id='edit' href="#" v-on:click='showMore(post, $event)'>Edit post</a>
-                  <a class="dropdown-item" id='delete' href="#" v-on:click='showMore(post, $event)'>Delete post</a>
+                  <a class="dropdown-item" id='edit' v-on:click='showMore(post, $event)'>Edit post</a>
+                  <a class="dropdown-item" id='delete' v-on:click='showMore(post, $event)'>Delete post</a>
                 </div>
             </span>
-            <modal v-if='loggedUser' v-bind:post='post'></modal>
-        </div>
+            <modal v-if='loggedUser' v-bind:post='post'></modal> 
+    </div>
     `,
     methods: {
         addLoggedUser(user, funcName, post) {
             // adding properties to the post object by getting post prop values
             if (user) { // if there is a user logged in, create prop in post object
                 post.loggedUser = JSON.parse(user);
-                post.isShowing = false;
+                post.isEditing = false;
             }
-            this.$emit(funcName, this.post); 
+            this.$emit(funcName, this.post, event.currentTarget.id); 
         },
         likePost(post) {
             this.addLoggedUser(this.loggedUser, 'like-post', post);
@@ -44,8 +53,8 @@ Vue.component('posts', {
         showModal(post) {
             this.addLoggedUser(this.loggedUser, 'show-modal', post);
         },
-        showMore(post, event) {
-            this.$emit('show-more', this.post, event.currentTarget.id);
+        showMore(post) {
+            this.addLoggedUser(this.loggedUser, 'show-more', post);
         },
         formatCompat(dateStr) { // formats mongoose date string into something nicer
             let date = new Date(dateStr);
@@ -75,8 +84,6 @@ Vue.component('modal', {
                 .catch(function (error) {
                     console.log(error);
                 });
-                post.isShowing = !post.isShowing;
-
         }
     },
     template: `
@@ -132,7 +139,6 @@ const postComponent = new Vue({
 
     methods: {
         like(post) {
-            
             if (post.loggedUser && !post.liked) { // if logged in and post has not been liked by this user
                 post.liked = !post.liked; // likes or unlikes by flipping post.liked property
                 post.likedBy.push(post.loggedUser);
@@ -152,9 +158,7 @@ const postComponent = new Vue({
         },
 
         more(post, eventID) {
-            post.isShowing = !post.isShowing;
-            
-            if (eventID === 'delete' && confirm(`Are you sure you want to delete this post? (${post.title})`)) {
+            if (post.loggedUser && eventID === 'delete' && confirm(`Are you sure you want to delete this post? (${post.title})`)) {
                 axios.delete(`http://localhost:3000/users/${username}/posts/${post._id}`)
                 .then(res => {
                     location.reload(); // refresh page
@@ -162,6 +166,11 @@ const postComponent = new Vue({
                 .catch(function (error) {
                     console.log(error);
                 });
+            }
+
+            if (post.loggedUser && eventID == 'edit' && confirm(`Are you sure you want to edit this post? (${post.title})`)) {
+                post.isEditing = !post.isEditing;
+                post.likedBy.push(); // temp for now. Makes variable reactive.
             }
             
         }
@@ -173,6 +182,7 @@ const postComponent = new Vue({
                 if (loggedUser) {
                     // for each post, check if loggedUser already liked it (to color in the icons)
                     for (let i = 0; i < this.posts.length; i++) {
+                        this.posts[i].isEditing = false;
                         for (let j = 0; j < this.posts[i].likedBy.length; j++) {
                             if (this.posts[i].likedBy.some(likedUser => likedUser.username === loggedUser.username)) {
                                 this.posts[i].liked = true;
