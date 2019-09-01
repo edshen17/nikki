@@ -6,6 +6,10 @@ body, h4 {
   font-family : 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' , '游ゴシック' , '游ゴシック体' , YuGothic , 'Yu Gothic' , 'メイリオ' , Meiryo , 'ＭＳ ゴシック' , 'MS Gothic' , HiraKakuProN-W3 , 'TakaoExゴシック' , TakaoExGothic , 'MotoyaLCedar' , 'Droid Sans Japanese' , sans-serif !important;
 }
 
+.carousel-inner {
+  height: 500px;
+}
+
 .text {
   font-size: 1.25em;
   line-height: 2;
