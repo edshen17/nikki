@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const jsonParser = require('body-parser').json;
 const session = require('express-session');
 const passport = require('passport');
-const routes = require('./routes/index.js');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
