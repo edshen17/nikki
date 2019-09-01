@@ -73,7 +73,7 @@ Vue.component('modal', {
     },
     methods: {
         onSubmit(post) {
-            axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, {
+            axios.post(`http://www.nikkiblog.live/users/${username}/posts/${post._id}/comment`, {
                     postedBy: post.loggedUser,
                     content: this.message,
                 })
@@ -111,7 +111,7 @@ Vue.component('modal', {
 
 // update comments array (will refactor later)
 function updatedCommentList(post) {
-    axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/comment`, {
+    axios.post(`http://www.nikkiblog.live/users/${username}/posts/${post._id}/comment`, {
             comments: post.comments,
         })
         .catch(function (error) {
@@ -121,7 +121,7 @@ function updatedCommentList(post) {
 
 // updates the list of likes by updating the db and replacing the db's array of likes with the current one
 function updatedLikeList(post) {
-    axios.post(`http://localhost:3000/users/${username}/posts/${post._id}/like`, {
+    axios.post(`http://www.nikkiblog.live/users/${username}/posts/${post._id}/like`, {
             likedBy: post.likedBy,
         })
         .catch(function (error) {
@@ -159,7 +159,7 @@ const postComponent = new Vue({
 
         more(post, eventID) {
             if (post.loggedUser && eventID === 'delete' && confirm(`Are you sure you want to delete this post? (${post.title})`)) {
-                axios.delete(`http://localhost:3000/users/${username}/posts/${post._id}`)
+                axios.delete(`http://www.nikkiblog.live/users/${username}/posts/${post._id}`)
                 .then(res => {
                     location.reload(); // refresh page
                 })
@@ -176,7 +176,7 @@ const postComponent = new Vue({
         }
     },
     mounted() {
-        axios.get(`http://localhost:3000/users/${username}/posts`)
+        axios.get(`http://www.nikkiblog.live/users/${username}/posts`)
             .then(response => {
                 this.posts = response.data;
                 if (loggedUser) {
