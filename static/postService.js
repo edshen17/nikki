@@ -6,7 +6,7 @@ Vue.component('posts', {
     props: ['post', 'loggedUser'],
     template: `
         <div class='blog-post py-2'>
-            <h4 class> {{post.title}} </h4>
+            <h2 class='title'> {{post.title}} </h2>
             <h6> Posted by {{post.postedBy}} on {{formatCompat(post.createdAt)}} </h6>
             <div v-if='!post.isEditing' v-html='post.content' class='py-2 text'></div>
             <div class="md-form">

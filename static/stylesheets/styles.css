@@ -2,18 +2,18 @@
     color: red; 
 }
 
-body, h4 {
+body {
   font-family : 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' , '游ゴシック' , '游ゴシック体' , YuGothic , 'Yu Gothic' , 'メイリオ' , Meiryo , 'ＭＳ ゴシック' , 'MS Gothic' , HiraKakuProN-W3 , 'TakaoExゴシック' , TakaoExGothic , 'MotoyaLCedar' , 'Droid Sans Japanese' , sans-serif !important;
   font-size: 1.3rem !important;
 }
 
-.text {
-  font-size: 1.25em;
-  line-height: 2;
+.title {
+  font-family : 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' , '游ゴシック' , '游ゴシック体' , YuGothic , 'Yu Gothic' , 'メイリオ' , Meiryo , 'ＭＳ ゴシック' , 'MS Gothic' , HiraKakuProN-W3 , 'TakaoExゴシック' , TakaoExGothic , 'MotoyaLCedar' , 'Droid Sans Japanese' , sans-serif !important;
 }
 
-.carousel-indicators {
-  display: none !important;
+.blog-post {
+  font-size: 1.27em;
+  line-height: 1.7;
 }
 
 .center {
@@ -65,3 +65,10 @@ textarea {
   }
 }
 
+/* Small devices - For blog/profile page */
+@media screen and (max-width: 720px) { 
+  .blog-post, h2 {
+    font-size: 1.3em;
+    line-height: 1.35;
+  }
+}

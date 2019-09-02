@@ -2,19 +2,9 @@ extends layout
 
 block content
 
-  #carouselIndicators.carousel.slide(data-ride='carousel')
-    .carousel-inner
-      .carousel-item.active
-        img.d-block.w-100(src='https://upload.wikimedia.org/wikipedia/commons/c/c4/Ukiyo-e_woodblock_print_by_Katsushika_Hokusai%2C_digitally_enhanced_by_rawpixel-com_19.jpg', alt='First slide')
-      //- .carousel-item
-      //-   img.d-block.w-100(src='https://upload.wikimedia.org/wikipedia/commons/5/51/Ukiyo-e_woodblock_print_by_Katsushika_Hokusai%2C_digitally_enhanced_by_rawpixel-com_18.jpg', alt='Second slide')
-      //- .carousel-item
-      //-   img.d-block.w-100(src='https://upload.wikimedia.org/wikipedia/commons/2/2c/Ukiyo-e_woodblock_print_by_Katsushika_Hokusai%2C_digitally_enhanced_by_rawpixel-com_20.jpg', alt='Third slide')
-      //- a.carousel-control-prev(href='#carouselIndicators', role='button', data-slide='prev')
-      //-   span.carousel-control-prev-icon(aria-hidden='true')
-      //-   span.sr-only Previous
-      //- a.carousel-control-next(href='#carouselIndicators', role='button', data-slide='next')
-      //-   span.carousel-control-next-icon(aria-hidden='true')
+
+    img.d-block.w-100(src='https://upload.wikimedia.org/wikipedia/commons/c/c4/Ukiyo-e_woodblock_print_by_Katsushika_Hokusai%2C_digitally_enhanced_by_rawpixel-com_19.jpg', alt='First slide')
+
       //-   span.sr-only Next
     .container-fluid.pt-4.px-4.overlap
       .row
@@ -33,7 +23,7 @@ block content
             h2.mb-4 Technologies
             p Nikki uses Vue.js, Passport.js, Bootstrap, MongoDB, and was designed RESTfully. I have yet to complete the REST API and implement API keys/tokens, but users can access their #[a(href="/users/shen.ed/json") JSON data] and also their #[a(href="/users/shen.ed/posts") post data], which are structured like Twitter's user and tweet objects. For more information, please check out my #[a(href="https://github.com/edshen17/nikki") Github repository]. 
             img.w-100.welcome(src='https://cdn.discordapp.com/attachments/507381363570114571/545580074913628161/image0.jpg', alt='Welcome')
-            h6.center.mb-5 Drawn by Yui Nomura (野村柚衣)
+            h5.center.mb-5 Drawn by Yui Nomura (野村柚衣)
         .col-xl-1
             
 
