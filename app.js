@@ -7,6 +7,12 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
 const flash = require('connect-flash');
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('/etc/ssl/websitessl/nikkiblog.live.key', 'utf8');
+var certificate = fs.readFileSync('/etc/ssl/websitessl/nikiblog.live.crt', 'utf8');
+var credentials = { key: privateKey, cert: certificate };
 const app = express();
 
 app.use(express.static(__dirname + '/static'));
@@ -72,7 +78,14 @@ app.use(function(err, req, res, next) {
   });
 });
 
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
 
-app.listen(3000, function() {
-  console.log('Express app listening on port 3000');
+httpServer.listen(8080);
+httpsServer.listen(80, function() {
+  console.log('Express app listening on port 80');
 });
+
+// app.listen(3000, function() {
+  
+// });
