@@ -10,8 +10,8 @@ const flash = require('connect-flash');
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
-var privateKey  = fs.readFileSync('/etc/ssl/websitessl/nikkiblog.live.key', 'utf8');
-var certificate = fs.readFileSync('/etc/ssl/websitessl/nikiblog.live.crt', 'utf8');
+var privateKey  = fs.readFileSync('nikkiblog.live.key', 'utf8');
+var certificate = fs.readFileSync('nikkiblog.live.crt', 'utf8');
 var credentials = { key: privateKey, cert: certificate };
 const app = express();
 
@@ -81,8 +81,7 @@ app.use(function(err, req, res, next) {
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(8080);
-httpsServer.listen(80, function() {
+httpsServer.listen(443, function() {
   console.log('Express app listening on port 80');
 });
 
