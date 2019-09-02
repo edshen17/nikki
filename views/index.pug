@@ -2,25 +2,14 @@ extends layout
 
 block content
 
-  #carouselIndicators.carousel.slide(data-ride='carousel')
-    .carousel-inner
-      .carousel-item.active
-        img.d-block.w-100(src='https://upload.wikimedia.org/wikipedia/commons/c/c4/Ukiyo-e_woodblock_print_by_Katsushika_Hokusai%2C_digitally_enhanced_by_rawpixel-com_19.jpg', alt='First slide')
-      .carousel-item
-        img.d-block.w-100(src='https://upload.wikimedia.org/wikipedia/commons/5/51/Ukiyo-e_woodblock_print_by_Katsushika_Hokusai%2C_digitally_enhanced_by_rawpixel-com_18.jpg', alt='Second slide')
-      .carousel-item
-        img.d-block.w-100(src='https://upload.wikimedia.org/wikipedia/commons/2/2c/Ukiyo-e_woodblock_print_by_Katsushika_Hokusai%2C_digitally_enhanced_by_rawpixel-com_20.jpg', alt='Third slide')
 
-      a.carousel-control-prev(href='#carouselIndicators', role='button', data-slide='prev')
-        span.carousel-control-prev-icon(aria-hidden='true')
-        span.sr-only Previous
-      a.carousel-control-next(href='#carouselIndicators', role='button', data-slide='next')
-        span.carousel-control-next-icon(aria-hidden='true')
-        span.sr-only Next
-    .container-fluid.pt-4.px-4
+    img.d-block.w-100(src='https://upload.wikimedia.org/wikipedia/commons/c/c4/Ukiyo-e_woodblock_print_by_Katsushika_Hokusai%2C_digitally_enhanced_by_rawpixel-com_19.jpg', alt='First slide')
+
+      //-   span.sr-only Next
+    .container-fluid.pt-4.px-4.overlap
       .row
-        .col-sm-1
-        .col-sm
+        .col-xl-1
+        .col-xl
             h1.mb-4 Nikki 日記
             p.mb-3  Welcome to Nikki, a website for language learning and language exchange. This website was inspired by Twitter and HelloTalk, as users can post in the languages they are learning and interact with native speakers! So far, Nikki has become a semi-blog style website, where users can log in, post content, like other posts, and make comments. This is still a work in progress, so I'd like to add some extra features, such as letting users upload profile pictures and have followers. 
             p.mb-3 You can view my Nikki profile #[a(href="/users/shen.ed") here] to get a better idea of what Nikki is and how it works.
@@ -30,12 +19,12 @@ block content
             h2.mb-4 Getting the most out of Nikki
             p.mb-3 Since this website was made primarily for Japanese learners (though it supports any language), if you are learning Japanese, I suggest you read Nikki blog posts with #[a(href="https://chrome.google.com/webstore/detail/yomichan/ogmnaimimemjmbakcfefmnahgdfhfami?hl=en-US") Yomichan]! Yomichan is a Google Extension that works great with Anki, so you can easily create kanji flashcards and add kanji you have never seen before or forgotten.
             p.mb-3 I also encourage you to write posts that are challenging to express in your target language. It will help your language skills greatly and boost your confidence! For even more value, have a native speaker read, correct, or comment on your posts. If you need help finding Japanese or English native speakers, please check out my #[a(href="https://discord.gg/wukf9dQ") Discord Server]. 
-        .col-sm
+        .col-xl
             h2.mb-4 Technologies
             p Nikki uses Vue.js, Passport.js, Bootstrap, MongoDB, and was designed RESTfully. I have yet to complete the REST API and implement API keys/tokens, but users can access their #[a(href="/users/shen.ed/json") JSON data] and also their #[a(href="/users/shen.ed/posts") post data], which are structured like Twitter's user and tweet objects. For more information, please check out my #[a(href="https://github.com/edshen17/nikki") Github repository]. 
-            img.w-100(src='https://cdn.discordapp.com/attachments/507381363570114571/545580074913628161/image0.jpg', alt='Welcome')
-            h6.center Drawn by Yui Nomura (野村柚衣)
-        .col-sm-1
+            img.w-100.welcome(src='https://cdn.discordapp.com/attachments/507381363570114571/545580074913628161/image0.jpg', alt='Welcome')
+            h5.center.mb-5 Drawn by Yui Nomura (野村柚衣)
+        .col-xl-1
             
 
         
