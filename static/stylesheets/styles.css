@@ -4,10 +4,7 @@
 
 body, h4 {
   font-family : 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' , '游ゴシック' , '游ゴシック体' , YuGothic , 'Yu Gothic' , 'メイリオ' , Meiryo , 'ＭＳ ゴシック' , 'MS Gothic' , HiraKakuProN-W3 , 'TakaoExゴシック' , TakaoExGothic , 'MotoyaLCedar' , 'Droid Sans Japanese' , sans-serif !important;
-}
-
-.carousel-inner {
-  height: 450px;
+  font-size: 1.3rem !important;
 }
 
 .text {
@@ -25,18 +22,46 @@ body, h4 {
     text-align: center;
 }
 
+.welcome {
+  margin: auto;
+  width: 50%;
+}
+
 textarea {
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* Small devices (tablets, 768px and up) */
-@media screen and (max-width: 600px) { 
-  
-.carousel-inner {
-  height: 20%;
-
- }
- 
+/* Med devices */
+@media screen and (min-width: 0px) { 
+  .overlap {
+    margin-top: -30%;
+    background-color: white;
+    position:absolute;
+    z-index:1;
+  }
 }
+
+/* Large devices */
+@media screen and (min-width: 992px) { 
+  .overlap {
+    margin-top: -45%;
+    background-color: white;
+    position:absolute;
+    z-index:1;
+  }
+
+  body {
+    font-size: 1.4rem !important;
+  }
+
+  .welcome {
+    max-width: 90%;
+    margin-top: -2%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
