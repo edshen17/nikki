@@ -14,9 +14,7 @@ const privateKey  = fs.readFileSync('nikkiblog.live.key', 'utf8');
 const certificate = fs.readFileSync('nikkiblog.live.crt', 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 const app = express();
-const httpServer = http.createServer(app);
 const httpsServer = https.createServer(credentials, app);
-const enforce = require('express-sslify');
 
 app.use(express.static(__dirname + '/static'));
 app.use(morgan('dev'));
@@ -54,9 +52,6 @@ app.set('view engine', 'pug');
 app.use(flash());
 app.use(cors());
 
-// Ensure HTTPS
-app.use(enforce.HTTPS()); 
-
 // Routes
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
@@ -84,16 +79,22 @@ app.use(function(err, req, res, next) {
 });
 
 //https
+var redirectApp = express () ,
+redirectServer = http.createServer(redirectApp);
 
-app.listen(80, function() {
+redirectApp.use(function requireHTTPS(req, res, next) {
+  if (!req.secure) {
+    return res.redirect('https://' + req.headers.host + req.url);
+  }
+  next();
+})
+
+redirectServer.listen(80, function() {
   console.log('Express app listening on port 80');
 });
+
 httpsServer.listen(443, function() {
   console.log('Express app listening on port 443');
 });
 
 
-
-// app.listen(3000, function() {
-  
-// });
