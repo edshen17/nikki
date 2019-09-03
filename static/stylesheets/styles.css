@@ -1,46 +1,56 @@
 .colorRed {
-    color: red; 
+  color: red; 
 }
 
 body {
-  font-family : 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' , '游ゴシック' , '游ゴシック体' , YuGothic , 'Yu Gothic' , 'メイリオ' , Meiryo , 'ＭＳ ゴシック' , 'MS Gothic' , HiraKakuProN-W3 , 'TakaoExゴシック' , TakaoExGothic , 'MotoyaLCedar' , 'Droid Sans Japanese' , sans-serif !important;
-  font-size: 1.3rem !important;
+font-family : 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' , '游ゴシック' , '游ゴシック体' , YuGothic , 'Yu Gothic' , 'メイリオ' , Meiryo , 'ＭＳ ゴシック' , 'MS Gothic' , HiraKakuProN-W3 , 'TakaoExゴシック' , TakaoExGothic , 'MotoyaLCedar' , 'Droid Sans Japanese' , sans-serif !important;
+font-size: 1.3rem !important;
+}
+
+#main {
+  z-index: -1;
 }
 
 .title {
-  font-family : 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' , '游ゴシック' , '游ゴシック体' , YuGothic , 'Yu Gothic' , 'メイリオ' , Meiryo , 'ＭＳ ゴシック' , 'MS Gothic' , HiraKakuProN-W3 , 'TakaoExゴシック' , TakaoExGothic , 'MotoyaLCedar' , 'Droid Sans Japanese' , sans-serif !important;
+font-family : 'ヒラギノ角ゴ ProN' , 'Hiragino Kaku Gothic ProN' , '游ゴシック' , '游ゴシック体' , YuGothic , 'Yu Gothic' , 'メイリオ' , Meiryo , 'ＭＳ ゴシック' , 'MS Gothic' , HiraKakuProN-W3 , 'TakaoExゴシック' , TakaoExGothic , 'MotoyaLCedar' , 'Droid Sans Japanese' , sans-serif !important;
 }
 
 .blog-post {
-  font-size: 1.27em;
-  line-height: 1.7;
+font-size: 1.27em;
+line-height: 1.7;
 }
 
 .center {
-    margin: auto;
-    width: 50%;
-    text-align: center;
+  margin: auto;
+  width: 50%;
+  text-align: center;
 }
 
 .welcome {
   margin: auto;
   width: 50%;
+  position: relative;
+  z-index: -1;
 }
 
 textarea {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer {
+z-index: 10;
 }
 
 /* Med devices */
 @media screen and (min-width: 0px) { 
-  .overlap {
-    margin-top: -30%;
-    background-color: white;
-    position:absolute;
-    z-index:1;
-  }
+.overlap {
+  margin-top: -30%;
+  background-color: white;
+  position: relative;;
+  z-index:1;
+}
 }
 
 /* Large devices */
@@ -48,8 +58,8 @@ textarea {
   .overlap {
     margin-top: -45%;
     background-color: white;
-    position:absolute;
-    z-index:1;
+    position:relative;
+    padding-bottom:3%;
   }
 
   body {
@@ -62,13 +72,14 @@ textarea {
     display: block;
     margin-left: auto;
     margin-right: auto;
-  }
+    
+    } 
 }
 
 /* Small devices - For blog/profile page */
 @media screen and (max-width: 720px) { 
-  .blog-post, h2 {
-    font-size: 1.3em;
-    line-height: 1.35;
-  }
+.blog-post, h2 {
+  font-size: 1.3em;
+  line-height: 1.35;
+}
 }

@@ -17,7 +17,7 @@ These instructions will get you a copy of the project up and running on your loc
 2. Start up Command Prompt or Terminal and navigate to the directory: ```cd <clone directory>```
 3. Install all the dependences by typing: ```npm install ``` 
 4. Input your mongo server's address/password in ```config/keys.js```
-5. Type ```nodemon app.js``` to start the website (which is on port 3000 by default)
+5. Type ```nodemon app.js``` to start the website (which is on ports 80 and 443 by default)
 
 ## Built With
 
