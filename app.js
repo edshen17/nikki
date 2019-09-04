@@ -7,14 +7,14 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const cors = require('cors');
 const flash = require('connect-flash');
-// const fs = require('fs');
+const fs = require('fs');
 const http = require('http');
-// const https = require('https');
-// const privateKey  = fs.readFileSync('nikkiblog.live.key', 'utf8');
-// const certificate = fs.readFileSync('nikkiblog.live.crt', 'utf8');
-// const credentials = { key: privateKey, cert: certificate };
+const https = require('https');
+const privateKey  = fs.readFileSync('nikkiblog.live.key', 'utf8');
+const certificate = fs.readFileSync('nikkiblog.live.crt', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
 const app = express();
-// const httpsServer = https.createServer(credentials, app);
+const httpsServer = https.createServer(credentials, app);
 
 app.use(express.static(__dirname + '/static'));
 app.use(morgan('dev'));
@@ -82,22 +82,19 @@ app.use(function(err, req, res, next) {
 var redirectApp = express () ,
 redirectServer = http.createServer(redirectApp);
 
-// redirectApp.use(function requireHTTPS(req, res, next) {
-//   if (!req.secure) {
-//     return res.redirect('https://' + req.headers.host + req.url);
-//   }
-//   next();
-// })
-
-// redirectServer.listen(3000, function() {
-//   console.log('Express app listening on port 80');
-// });
-
-app.listen(3000, function() {
-    console.log('Express app listening on port 3000');
+redirectApp.use(function requireHTTPS(req, res, next) {
+  if (!req.secure) {
+    return res.redirect('https://' + req.headers.host + req.url);
+  }
+  next();
 })
-// httpsServer.listen(443, function() {
-//   console.log('Express app listening on port 443');
-// });
+
+redirectServer.listen(80, function() {
+  console.log('Express app listening on port 80');
+});
+
+httpsServer.listen(443, function() {
+  console.log('Express app listening on port 443');
+});
 
 
