@@ -14,7 +14,7 @@ router.get('*', (req, res, next) => {
 
 // GET /
 router.get('/', (req, res) => {
-  const title = 'Home';
+  const title = 'Home | Nikki';
   return res.render('index', {
     title,
   });
