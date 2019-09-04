@@ -35,7 +35,7 @@ router.param('id', (req, res, next, id) => {
 
 // GET /login
 router.get('/login', (req, res) => {
-  const title = 'Login';
+  const title = 'Login | Nikki';
   const error = req.flash('error');
 
   return res.render('login', {
@@ -46,7 +46,7 @@ router.get('/login', (req, res) => {
 
 // GET users/register
 router.get('/register', (req, res) => {
-  const title = 'Register';
+  const title = 'Register | Nikki';
   return res.render('register', {
     title,
   });
@@ -156,7 +156,7 @@ router.get('/:username', (req, res, next) => {
       let loggedUser = null;
       const bio = users[0].bio;
       const username = req.params.username;
-
+      const title = `${username} | Profile`;
       if (req.user) { // if user is logged in, use session var to create a client-side user object (omitting email/password)           
         const imageURL = req.user.imageURL;
         const bio = req.user.bio;
@@ -173,6 +173,7 @@ router.get('/:username', (req, res, next) => {
         username,
         bio,
         loggedUser,
+        title,
       });
     });
 });
