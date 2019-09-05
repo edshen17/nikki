@@ -2,9 +2,9 @@
 
 Vue.use(VueRouter);
 
-Vue.component('posts', {
-    props: ['post', 'loggedUser'],
-    template: `
+Vue.component("posts", {
+  props: ["post", "loggedUser"],
+  template: `
         <div class='blog-post py-2 mb-3'>
             <h2 class='title'> {{post.title}} </h2>
             <h6> Posted by {{post.postedBy}} on {{formatCompat(post.createdAt)}} </h6>
@@ -38,55 +38,76 @@ Vue.component('posts', {
             <modal v-if='loggedUser' v-bind:post='post'></modal> 
     </div>
     `,
-    methods: {
-        addLoggedUser(user, funcName, post) {
-            // adding properties to the post object by getting post prop values
-            if (user) { // if there is a user logged in, create prop in post object
-                post.loggedUser = JSON.parse(user);
-                post.isEditing = false;
-            }
-            this.$emit(funcName, this.post, event.currentTarget.id); 
-        },
-        likePost(post) {
-            this.addLoggedUser(this.loggedUser, 'like-post', post);
-        },
-        showModal(post) {
-            this.addLoggedUser(this.loggedUser, 'show-modal', post);
-        },
-        showMore(post) {
-            this.addLoggedUser(this.loggedUser, 'show-more', post);
-        },
-        formatCompat(dateStr) { // formats mongoose date string into something nicer
-            let date = new Date(dateStr);
-            let month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            return `${month[date.getMonth()]} ${date.getDate()}  ${date.getFullYear()}`;
-        }
+  methods: {
+    addLoggedUser(user, funcName, post) {
+      // adding properties to the post object by getting post prop values
+      if (user) {
+        // if there is a user logged in, create prop in post object
+        post.loggedUser = JSON.parse(user);
+        post.isEditing = false;
+      }
+      this.$emit(funcName, this.post, event.currentTarget.id);
+    },
+    likePost(post) {
+      this.addLoggedUser(this.loggedUser, "like-post", post);
+    },
+    showModal(post) {
+      this.addLoggedUser(this.loggedUser, "show-modal", post);
+    },
+    showMore(post) {
+      this.addLoggedUser(this.loggedUser, "show-more", post);
+    },
+    formatCompat(dateStr) {
+      // formats mongoose date string into something nicer
+      let date = new Date(dateStr);
+      let month = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ];
+      return `${
+        month[date.getMonth()]
+      } ${date.getDate()}  ${date.getFullYear()}`;
     }
+  }
 });
 
-Vue.component('modal', {
-    props: ['post'],
-    data() {
-        return {
-            message: '',
-        }
-    },
-    methods: {
-        onSubmit(post) {
-            axios.post(`https://www.nikkiblog.live/users/${username}/posts/${post._id}/comment`, {
-                    postedBy: post.loggedUser,
-                    content: this.message,
-                })
-                .then(res => {
-                    post.comments.push(res.data);
-                    updatedCommentList(post);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-    },
-    template: `
+Vue.component("modal", {
+  props: ["post"],
+  data() {
+    return {
+      message: ""
+    };
+  },
+  methods: {
+    onSubmit(post) {
+      axios
+        .post(
+          `https://www.nikkiblog.live/users/${username}/posts/${post._id}/comment`,
+          {
+            postedBy: post.loggedUser,
+            content: this.message
+          }
+        )
+        .then(res => {
+          post.comments.push(res.data);
+          updatedCommentList(post);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
+  },
+  template: `
         <div class="modal fade" :id="'post' + post._id" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true" >
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -107,91 +128,115 @@ Vue.component('modal', {
             </div>
         </div>
     `
-})
+});
 
 // update comments array (will refactor later)
 function updatedCommentList(post) {
-    axios.post(`https://www.nikkiblog.live/users/${username}/posts/${post._id}/comment`, {
-            comments: post.comments,
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+  axios
+    .post(
+      `https://www.nikkiblog.live/users/${username}/posts/${post._id}/comment`,
+      {
+        comments: post.comments
+      }
+    )
+    .catch(function(error) {
+      console.log(error);
+    });
 }
 
 // updates the list of likes by updating the db and replacing the db's array of likes with the current one
 function updatedLikeList(post) {
-    axios.post(`https://www.nikkiblog.live/users/${username}/posts/${post._id}/like`, {
-            likedBy: post.likedBy,
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+  axios
+    .post(
+      `https://www.nikkiblog.live/users/${username}/posts/${post._id}/like`,
+      {
+        likedBy: post.likedBy
+      }
+    )
+    .catch(function(error) {
+      console.log(error);
+    });
 }
 
-
 const postComponent = new Vue({
-    el: '#posts',
+  el: "#posts",
 
-    data: {
-        posts: null,
+  data: {
+    posts: null
+  },
+
+  methods: {
+    like(post) {
+      if (post.loggedUser && !post.liked) {
+        // if logged in and post has not been liked by this user
+        post.liked = !post.liked; // likes or unlikes by flipping post.liked property
+        post.likedBy.push(post.loggedUser);
+        updatedLikeList(post);
+      } else if (post.liked) {
+        //user unliking the post
+        post.liked = !post.liked;
+        post.likedBy.pop();
+        updatedLikeList(post);
+      }
+      this.show(post);
     },
 
-    methods: {
-        like(post) {
-            if (post.loggedUser && !post.liked) { // if logged in and post has not been liked by this user
-                post.liked = !post.liked; // likes or unlikes by flipping post.liked property
-                post.likedBy.push(post.loggedUser);
-                updatedLikeList(post);
-            } else if (post.liked) { //user unliking the post
-                post.liked = !post.liked; 
-                post.likedBy.pop();
-                updatedLikeList(post);
-            }
-            this.show(post);
-        },
-
-        show(post) {
-            if (!post.loggedUser) {
-                alert('You must be logged in to like or comment on a post');
-            }
-        },
-
-        more(post, eventID) {
-            if (post.loggedUser && eventID === 'delete' && confirm(`Are you sure you want to delete this post? (${post.title})`)) {
-                axios.delete(`https://www.nikkiblog.live/users/${username}/posts/${post._id}`)
-                .then(res => {
-                    location.reload(); // refresh page
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            }
-
-            if (post.loggedUser && eventID == 'edit' && confirm(`Are you sure you want to edit this post? (${post.title})`)) {
-                post.isEditing = !post.isEditing;
-                post.likedBy.push(); // temp for now. Makes variable reactive.
-            }
-            
-        }
+    show(post) { 
+      if (!post.loggedUser) {
+        alert("You must be logged in to like or comment on a post");
+      }
     },
-    mounted() {
-        axios.get(`https://www.nikkiblog.live/users/${username}/posts`)
-            .then(response => {
-                this.posts = response.data;
-                if (loggedUser) {
-                    // for each post, check if loggedUser already liked it (to color in the icons)
-                    for (let i = 0; i < this.posts.length; i++) {
-                        this.posts[i].isEditing = false;
-                        for (let j = 0; j < this.posts[i].likedBy.length; j++) {
-                            if (this.posts[i].likedBy.some(likedUser => likedUser.username === loggedUser.username)) {
-                                this.posts[i].liked = true;
-                            } else {
-                                this.posts[i].liked = false;
-                            }
-                        }
-                    }
-                }
-            })
+
+    more(post, eventID) {
+      if (
+        post.loggedUser &&
+        eventID === "delete" &&
+        confirm(`Are you sure you want to delete this post? (${post.title})`)
+      ) {
+        axios
+          .delete(
+            `https://www.nikkiblog.live/users/${username}/posts/${post._id}`
+          )
+          .then(res => {
+            location.reload(); // refresh page
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+
+      if (
+        post.loggedUser &&
+        eventID == "edit" &&
+        confirm(`Are you sure you want to edit this post? (${post.title})`)
+      ) {
+        post.isEditing = !post.isEditing;
+        post.likedBy.push(); // temp for now. Makes variable reactive.
+      }
     }
+  },
+  mounted() {
+    axios
+      .get(`https://www.nikkiblog.live/users/${username}/posts`)
+      .then(response => {
+        this.posts = response.data;
+        if (loggedUser) {
+          // for each post, check if loggedUser already liked it (to color in the icons)
+          for (let i = 0; i < this.posts.length; i++) {
+            this.posts[i].isEditing = false;
+            for (let j = 0; j < this.posts[i].likedBy.length; j++) {
+              if (
+                this.posts[i].likedBy.some(
+                  likedUser => likedUser.username === loggedUser.username
+                )
+              ) {
+                this.posts[i].liked = true;
+              } else {
+                this.posts[i].liked = false;
+              }
+            }
+          }
+        }
+      });
+  }
 });
