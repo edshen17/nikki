@@ -12,7 +12,9 @@ const http = require('http');
 const https = require('https');
 const privateKey  = fs.readFileSync('nikkiblog.live.key', 'utf8');
 const certificate = fs.readFileSync('nikkiblog.live.crt', 'utf8');
-const credentials = { key: privateKey, cert: certificate };
+const ca = fs.readFileSync( 'intermediate.crt', 'utf8');
+
+const credentials = { key: privateKey, cert: certificate, ca };
 const app = express();
 const httpsServer = https.createServer(credentials, app);
 
