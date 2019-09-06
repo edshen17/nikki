@@ -35,6 +35,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-* Special thanks to the staff at Metrokids Preschool and JP House Discord server users.
+* Special thanks to the staff at Metrokids Preschool and JP House Discord server users (especially [Unigiri](https://github.com/unigiriunini)).
 
 
