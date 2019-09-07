@@ -9,14 +9,14 @@ Vue.component("posts", {
             <h2 class='title'> {{post.title}} </h2>
             <h6> Posted by {{post.postedBy}} on {{formatCompat(post.createdAt)}} </h6>
             <div v-if='!post.isEditing' v-html='post.content' class='py-2 text'></div>
-            <div class="md-form">
-            <textarea class="md-textarea form-control" rows="15" :value='post.content' :disabled='!post.isEditing' v-if='post.isEditing'></textarea>
+            <div class="md-form" v-if='post.isEditing'>
+            <textarea class="md-textarea form-control" :id="'textArea' + post._id" rows="15" :value='post.content' :disabled='!post.isEditing'></textarea>
             </div>
             <div class='edit'>
                 <button v-if="post.isEditing" class='btn btn-primary'>
                      Save
                 </button>
-                <button class='btn btn-secondary' v-if="post.isEditing" @click="post.isEditing = false; post.likedBy.push();">Cancel</button>
+                <button class='btn btn-secondary' id="cancel" v-if="post.isEditing" @click="post.isEditing = false; post.likedBy.push();">Cancel</button>
             </div>
                 <p> Liked by: {{post.likedBy}}</p> 
                 <p> Comments: {{post.comments}}</p>
@@ -92,18 +92,17 @@ Vue.component("modal", {
     onSubmit(post) {
       axios
         .post(
-          `https://www.nikkiblog.live/users/${username}/posts/${post._id}/comment`,
+          `http://localhost:80/users/${username}/posts/${post._id}/comment`,
           {
             postedBy: post.loggedUser,
             content: this.message
           }
-        )
+        ) .catch(function(error) {
+          console.log(error);
+        })
         .then(res => {
           post.comments.push(res.data);
           updatedCommentList(post);
-        })
-        .catch(function(error) {
-          console.log(error);
         });
     }
   },
@@ -130,11 +129,13 @@ Vue.component("modal", {
     `
 });
 
+
 // update comments array (will refactor later)
 function updatedCommentList(post) {
+  console.log('made a comment 1')
   axios
     .post(
-      `https://www.nikkiblog.live/users/${username}/posts/${post._id}/comment`,
+      `http://localhost/users/${username}/posts/${post._id}/comment`,
       {
         comments: post.comments
       }
@@ -207,11 +208,13 @@ const postComponent = new Vue({
 
       if (
         post.loggedUser &&
-        eventID == "edit" &&
-        confirm(`Are you sure you want to edit this post? (${post.title})`)
+        eventID == "edit"
       ) {
         post.isEditing = !post.isEditing;
         post.likedBy.push(); // temp for now. Makes variable reactive.
+        Vue.nextTick(function () { //wait for the textArea to render
+          new nicEditor({fullPanel : true}).panelInstance(`textArea${post._id}`);
+        })
       }
     }
   },
