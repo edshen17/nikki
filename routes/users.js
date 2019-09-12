@@ -1,5 +1,5 @@
+/* eslint-disable */
 const express = require('express');
-
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
@@ -35,7 +35,7 @@ router.param('id', (req, res, next, id) => {
 
 // GET /login
 router.get('/login', (req, res) => {
-  const title = 'Login | Nikki';
+  const title = 'Login';
   const error = req.flash('error');
 
   return res.render('login', {
@@ -46,7 +46,7 @@ router.get('/login', (req, res) => {
 
 // GET users/register
 router.get('/register', (req, res) => {
-  const title = 'Register | Nikki';
+  const title = 'Register';
   return res.render('register', {
     title,
   });
@@ -54,71 +54,83 @@ router.get('/register', (req, res) => {
 
 // POST /users/register
 // Making a user in the db
-router.post('/register', function(req, res, next) {
-  const { username, email, password, password2 } = req.body;
-  let errors = [];
+router.post('/register', (req, res) => {
+  const {
+    username,
+    email,
+    password,
+    password2,
+  } = req.body;
+  const errors = [];
 
   // Check if user did not fill out all inputs
   if (!username || !email || !password || !password2) {
-    errors.push({msg: 'Please fill out all fields'})
+    errors.push({
+      msg: 'Please fill out all fields',
+    });
   }
 
   // Check passwords
   if (password !== password2) {
-    errors.push({msg: 'Passwords do not match!'});
+    errors.push({
+      msg: 'Passwords do not match!',
+    });
   }
 
   if (password.length < 6) {
-    errors.push ({msg: 'Password should be at least 6 characters long'});
+    errors.push({
+      msg: 'Password should be at least 6 characters long',
+    });
   }
 
-  if(errors.length > 0) {
+  if (errors.length > 0) {
     res.render('register', {
       errors,
       username,
       email,
       password,
-      password2
+      password2,
     });
-  }
-
-  else {
+  } else {
     // Validation
-    User.findOne({ email: email})
-      .then(user => {
+    User.findOne({
+      email,
+    })
+      .then((user) => {
         if (user) {
           // user exists
-            errors.push({msg: 'A user with that email already exists'});
-            res.render('register', {
-              errors,
-              username,
-              email,
-              password,
-              password2
-            });
+          errors.push({
+            msg: 'A user with that email already exists',
+          });
+          res.render('register', {
+            errors,
+            username,
+            email,
+            password,
+            password2,
+          });
         } else {
           const newUser = new User({
-            username: username,
-            email: email,
-            password: password
+            username,
+            email,
+            password,
           });
 
           // Hash password
-          bcrypt.genSalt(10, (err, salt) =>
-            bcrypt.hash(newUser.password, salt, (err, hash) => {
-              if (err) throw err;
-              newUser.password = hash;
-              newUser.save()
-                .then(user => {
-                  req.login(user, function(err) {
-                    if (err) {
-                      console.log(err);
-                    } else {
-                      return res.redirect('/dashboard');
-                    }
-                  })
-                })
-                .catch(err => console.log(err));
+          bcrypt.genSalt(10, (err, salt) => bcrypt.hash(newUser.password, salt, (hash) => {
+            if (err) throw err;
+            newUser.password = hash;
+            newUser.save()
+              .then(() => {
+                req.login(() => {
+                  if (err) {
+                    console.log(err);
+                  } else {
+                    return res.redirect('/dashboard');
+                  }
+                });
+              })
+              .catch(console.log(err));
           }));
         }
       });
@@ -156,7 +168,7 @@ router.get('/:username', (req, res, next) => {
       let loggedUser = null;
       const bio = users[0].bio;
       const username = req.params.username;
-      const title = `${username} | Profile`;
+
       if (req.user) { // if user is logged in, use session var to create a client-side user object (omitting email/password)           
         const imageURL = req.user.imageURL;
         const bio = req.user.bio;
@@ -173,7 +185,6 @@ router.get('/:username', (req, res, next) => {
         username,
         bio,
         loggedUser,
-        title,
       });
     });
 });
@@ -208,7 +219,7 @@ router.get('/:username/json', (req, res, next) => {
 });
 
 // GET /users/:username/posts
-// Route for getting all the posts of a user
+// Route for getting all the posts of a user in json
 router.get('/:username/posts', (req, res, next) => {
   Post.find({
     postedBy: req.params.username,
@@ -262,12 +273,15 @@ router.post('/:username/posts/:id/like', (req, res, next) => {
 
 // DELETE /users/:username/posts/:id/
 // Route for deleting a specific post
-router.delete('/:username/posts/:id', (req, res, next) => {
+router.delete('/:username/posts/:id', (req, res, next) => {  
   req.post.remove(() => {
-    req.post.save((err) => {
+    var id = req.params.id;
+    Comment.deleteMany({ parentID: id }, (err) => { // deletes all comments in the post as well
       if (err) return next(err);
-      res.status(200).send();
-    });
+      req.post.save(() => {
+        res.status(200).send();
+       });
+    })
   });
 });
 
@@ -283,29 +297,48 @@ router.post('/:username/posts/:id/comment', (req, res, next) => {
         res.status(200).json(post);
       });
     });
-  } else {
+  } else { // creating a new comment
+    const parentID = req.params.id;
     const postedBy = req.body.postedBy;
     const content = req.body.content;
     const comment = new Comment({
+      parentID,
       postedBy,
       content,
     });
-    comment.save((err) => {
-      if (err) return next(err);
-      res.status(200).json(comment);
-    });
+
+    User.find({
+      username: req.params.username,
+    })
+      .exec((err, user) => {
+        if (err) return next(err);
+        user.comments.push(comment);
+        users.comment_count++;
+        user.save(() => {
+          if (err) return next(err);
+          comment.save((err) => {
+            if (err) return next(err);
+            res.status(200).json(comment);
+          });
+        });
+      });
   }
 });
 
 // PUT /users/:username/posts/:id/
 // Edit a specific post
 router.put('/:username/posts/:id/', (req, res) => {
-  return res.json({
-    response: 'put request to edit a post',
-    postId: req.params.id,
-    commentId: req.params.cid,
-    body: req.body,
+  
+  req.answer.update(req.body, function(err, result) {
+    if (err) return next(err);
+    res.json(result);
   });
+  // return res.json({
+  //   response: 'put request to edit a post',
+  //   postId: req.params.id,
+  //   commentId: req.params.cid,
+  //   body: req.body,
+  // });
 });
 
 // PUT /users/:username/posts/:id/:cid
